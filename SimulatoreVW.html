@@ -1,0 +1,559 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simulatore Finanziario VW</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        input[type=range] { -webkit-appearance: none; width: 100%; background: transparent; }
+        input[type=range]:focus { outline: none; }
+        input[type=range]::-webkit-slider-runnable-track { width: 100%; height: 8px; cursor: pointer; background: #d1d5db; border-radius: 5px; }
+        input[type=range]::-webkit-slider-thumb { -webkit-appearance: none; height: 20px; width: 20px; border-radius: 50%; background: #2563eb; cursor: pointer; margin-top: -6px; }
+        .tab-button.active { background-color: #2563eb; color: white; }
+        .tab-button { transition: all 0.3s ease; }
+        .error-message { color: #ef4444; font-size: 0.875rem; display: none; }
+    </style>
+</head>
+<body class="bg-gray-100 flex items-center justify-center min-h-screen p-4">
+
+    <div id="main-container" class="w-full max-w-5xl mx-auto bg-white rounded-2xl shadow-lg overflow-hidden">
+        <div class="md:flex">
+            <!-- Colonna Sinistra: Input -->
+            <div id="controls-column" class="md:w-1/2 p-8 overflow-y-auto" style="max-height: 95vh;">
+                <h1 class="text-2xl font-bold text-gray-800 mb-6">Simulatore Finanziario</h1>
+                
+                <div class="mb-6">
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Tipo di Finanziamento</label>
+                    <div class="grid grid-cols-3 bg-gray-200 rounded-lg p-1">
+                        <button id="btn-pvv" type="button" class="tab-button p-2 rounded-md text-sm font-semibold active">Progetto Valore</button>
+                        <button id="btn-multimake" type="button" class="tab-button p-2 rounded-md text-sm font-semibold">Multimake</button>
+                        <button id="btn-classico" type="button" class="tab-button p-2 rounded-md text-sm font-semibold">Credito Classico</button>
+                    </div>
+                </div>
+
+                <form id="loan-form" class="space-y-6">
+                    <input type="hidden" id="tipo_finanziamento" value="pvv">
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                         <div>
+                            <label for="nome_cliente" class="block text-sm font-medium text-gray-700">Nome Cliente</label>
+                            <input type="text" id="nome_cliente" class="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm" placeholder="Mario Rossi">
+                        </div>
+                        <div>
+                            <label for="modello_veicolo" class="block text-sm font-medium text-gray-700">Modello Veicolo</label>
+                            <input type="text" id="modello_veicolo" class="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm" placeholder="Es. T-Roc">
+                        </div>
+                        <div>
+                            <label for="prezzo" class="block text-sm font-medium text-gray-700">Prezzo Veicolo (€)</label>
+                            <input type="number" id="prezzo" class="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm" placeholder="Es. 35000" required>
+                        </div>
+                    </div>
+
+                    <!-- Anticipo -->
+                    <div>
+                        <label for="anticipo_manuale" class="block text-sm font-medium text-gray-700">Anticipo</label>
+                        <div id="anticipo-container" class="flex items-center space-x-4 mt-1">
+                            <select id="anticipo_percent" class="block w-1/3 pl-3 pr-10 py-2 text-base border-gray-300 rounded-md"></select>
+                            <input type="number" id="anticipo_manuale" class="block w-2/3 px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm" placeholder="Importo manuale">
+                        </div>
+                        <p id="anticipo-error" class="error-message mt-1">L'anticipo non può superare il 35%.</p>
+                    </div>
+                    
+                    <div id="options-pvv-common" class="space-y-6">
+                        <div>
+                            <label for="durata_pvv" class="block text-sm font-medium text-gray-700">Durata: <span id="durata-pvv-value" class="font-bold text-blue-600">36 mesi</span></label>
+                            <input type="range" id="durata_pvv" min="24" max="36" value="36" step="12" class="w-full">
+                            <div id="durata-pvv-labels" class="flex justify-between text-xs text-gray-500 px-1"><span>24</span><span>36</span></div>
+                        </div>
+                        <div>
+                            <label for="vfg" class="block text-sm font-medium text-gray-700">Valore Futuro Garantito (VFG): <span id="vfg-value" class="font-bold text-blue-600">45%</span></label>
+                            <input type="range" id="vfg" min="30" max="65" value="45" class="w-full">
+                        </div>
+                    </div>
+
+                    <div id="tan-options-container">
+                        <span class="block text-sm font-medium text-gray-700">Tasso di Interesse (TAN)</span>
+                        <div id="tan-pvv-options" class="mt-2 flex space-x-4">
+                            <label class="inline-flex items-center"><input type="radio" name="tasso" value="7.99" class="form-radio text-blue-600"><span class="ml-2">7,99%</span></label>
+                            <label class="inline-flex items-center"><input type="radio" name="tasso" value="9.99" class="form-radio text-blue-600" checked><span class="ml-2">9,99%</span></label>
+                        </div>
+                        <div id="tan-multimake-display" class="hidden mt-2">
+                            <p class="text-gray-800 font-semibold">10,99%</p>
+                        </div>
+                        <div id="tan-alert" class="hidden mt-2 p-2 bg-yellow-100 border-l-4 border-yellow-500 text-yellow-700 text-sm rounded-md">
+                            <p>Assicurati che la vettura sia una KM0 o una Classe 32 idonea.</p>
+                        </div>
+                    </div>
+
+                    <div id="options-classico" class="hidden space-y-6">
+                         <div>
+                            <label for="durata_classico" class="block text-sm font-medium text-gray-700">Durata: <span id="durata-classico-value" class="font-bold text-blue-600">48 mesi</span></label>
+                            <input type="range" id="durata_classico" min="24" max="72" value="48" step="1" class="w-full">
+                            <div class="flex justify-between text-xs text-gray-500 px-1"><span>24</span><span>72</span></div>
+                        </div>
+                    </div>
+                    
+                    <!-- Manutenzione (solo PVV) -->
+                    <div id="manutenzione-container" class="hidden bg-gray-50 p-4 rounded-lg">
+                        <p class="text-sm font-medium text-gray-700 mb-3">Manutenzione Obbligatoria</p>
+                        <div class="space-y-3">
+                            <div>
+                                <label class="flex items-center">
+                                    <input type="radio" name="tipo_motore" value="diesel_benzina" class="h-4 w-4 text-blue-600 border-gray-300" required checked>
+                                    <span class="ml-3 text-sm text-gray-800">Diesel e Benzina</span>
+                                </label>
+                                <div id="tagliandi-options" class="ml-7 mt-2 space-y-2">
+                                    <label class="flex items-center"><input type="radio" name="numero_tagliandi" value="1" class="h-4 w-4 text-blue-600 border-gray-300" checked><span class="ml-3 text-sm text-gray-600">1 Tagliando (5€/mese)</span></label>
+                                    <label class="flex items-center"><input type="radio" name="numero_tagliandi" value="2" class="h-4 w-4 text-blue-600 border-gray-300"><span class="ml-3 text-sm text-gray-600">2 Tagliandi (13€/mese)</span></label>
+                                </div>
+                            </div>
+                            <label class="flex items-center">
+                                <input type="radio" name="tipo_motore" value="up_metano_plugin" class="h-4 w-4 text-blue-600 border-gray-300" required>
+                                <span class="ml-3 text-sm text-gray-800">UP!, Vetture a Metano o Plug-in (2 Tagliandi - 13€/mese)</span>
+                            </label>
+                        </div>
+                    </div>
+
+                    <div class="bg-gray-50 p-4 rounded-lg">
+                        <p class="text-sm font-medium text-gray-700 mb-3">Servizi Aggiuntivi</p>
+                        <div class="space-y-3">
+                             <label class="flex items-center"><input type="checkbox" id="servizio_furto" class="h-4 w-4 text-blue-600 border-gray-300 rounded"><span class="ml-3 text-sm text-gray-800">Furto e Incendio</span></label>
+                             <div id="furto_options" class="hidden ml-7 mt-2 space-y-3">
+                                <div class="space-y-2">
+                                    <label class="flex items-center"><input type="radio" name="furto_pacchetto" value="first_trip" checked class="h-4 w-4 text-blue-600 border-gray-300"><span class="ml-2 text-sm text-gray-600">First Trip (Base)</span></label>
+                                    <label class="flex items-center"><input type="radio" name="furto_pacchetto" value="business_tour" class="h-4 w-4 text-blue-600 border-gray-300"><span class="ml-2 text-sm text-gray-600">Business Tour</span></label>
+                                </div>
+                                <div>
+                                    <label for="servizi-durata" class="block text-xs font-medium text-gray-500 mb-1">Durata</label>
+                                    <select id="servizi-durata" class="block w-full text-sm border-gray-300 rounded-md"><option value="12">12 mesi</option><option value="24">24 mesi</option><option value="36" selected>36 mesi</option><option value="48">48 mesi</option></select>
+                                </div>
+                             </div>
+                             <label class="flex items-center"><input type="checkbox" id="servizio_gap" class="h-4 w-4 text-blue-600 border-gray-300 rounded"><span class="ml-3 text-sm text-gray-800">GAP</span></label>
+                             <label class="flex items-center"><input type="checkbox" id="servizio_alter_ego" class="h-4 w-4 text-blue-600 border-gray-300 rounded"><span class="ml-3 text-sm text-gray-800">Alter Ego</span></label>
+                             <label class="flex items-center"><input type="checkbox" id="servizio_personal_safe" class="h-4 w-4 text-blue-600 border-gray-300 rounded"><span class="ml-3 text-sm text-gray-800">Personal Safe</span></label>
+                        </div>
+                    </div>
+
+                    <button type="submit" class="w-full bg-blue-600 text-white font-bold py-3 px-4 rounded-lg hover:bg-blue-700">Calcola Preventivo</button>
+                </form>
+            </div>
+
+            <!-- Colonna Destra: Risultati -->
+            <div id="risultati-container" class="md:w-1/2 p-8 bg-gray-50 hidden overflow-y-auto" style="max-height: 95vh;">
+                <div id="risultati-stampa">
+                    <h2 class="text-2xl font-bold text-gray-800 mb-2">Riepilogo Finanziamento</h2>
+                    <p class="text-gray-600 mb-6" id="res-nome-cliente"></p>
+                    <div class="space-y-4 text-sm">
+                        <div id="usura-alert" class="hidden mt-4 p-4 bg-red-100 border-l-4 border-red-500 text-red-700 text-sm rounded-md">
+                            <p class="font-bold">ATTENZIONE: Tasso di Usura Superato</p>
+                            <p>Il TAEG calcolato per questa operazione supera la soglia legale. Modificare i parametri del finanziamento.</p>
+                        </div>
+                        <div class="flex justify-between items-center"><span class="text-gray-600">Prezzo Veicolo:</span><span id="res-prezzo" class="font-semibold text-gray-800"></span></div>
+                        <div class="flex justify-between items-center"><span class="text-gray-600">Anticipo Versato:</span><span id="res-anticipo" class="font-semibold text-gray-800"></span></div>
+                        <div id="res-vfg-container" class="flex justify-between items-center"><span class="text-gray-600">Valore Futuro Garantito:</span><span id="res-vfg" class="font-semibold text-gray-800"></span></div>
+                        <hr>
+                        <div class="flex justify-between items-center"><span class="text-gray-600">Spese Istruttoria:</span><span id="res-spese-istruttoria" class="font-semibold text-gray-800"></span></div>
+                        <div class="flex justify-between items-center"><span class="text-gray-600">Costo Servizi Aggiuntivi:</span><span id="res-costo-servizi" class="font-semibold text-gray-800"></span></div>
+                        <div class="flex justify-between items-center font-bold text-base"><span class="text-gray-800">Importo Totale Finanziato:</span><span id="res-importo-finanziato" class="text-blue-600"></span></div>
+                        <hr>
+                        <div class="flex justify-between items-center"><span class="text-gray-600">Durata:</span><span id="res-durata" class="font-semibold text-gray-800"></span></div>
+                        <div class="flex justify-between items-center"><span class="text-gray-600">TAN:</span><span id="res-tan" class="font-semibold text-gray-800"></span></div>
+                        <div class="flex justify-between items-center font-bold"><span class="text-gray-800">TAEG:</span><span id="res-taeg" class="text-blue-600"></span></div>
+                        
+                        <div id="rata-container" class="mt-6 p-4 bg-blue-100 rounded-lg text-center">
+                            <p class="text-lg text-blue-800">Rata Mensile</p>
+                            <p id="res-rata-mensile" class="text-4xl font-bold text-blue-700 my-2"></p>
+                            <p id="res-numero-rate" class="text-sm text-blue-600"></p>
+                        </div>
+                        <div id="res-maxi-rata-container" class="mt-4 p-4 bg-gray-200 rounded-lg text-center">
+                             <p class="text-base text-gray-700">Maxi Rata Finale (VFG)</p>
+                             <p id="res-maxi-rata" class="text-2xl font-bold text-gray-800 mt-1"></p>
+                        </div>
+                    </div>
+                </div>
+                <button id="print-button" class="mt-8 w-full bg-gray-700 text-white font-bold py-3 px-4 rounded-lg hover:bg-gray-800">Stampa Riepilogo</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Elemento per la stampa, invisibile di default -->
+    <div id="print-page" class="hidden">
+        <div class="flex flex-col h-full justify-between text-center">
+            <div>
+                <svg class="w-48 h-48 mx-auto mb-8" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+                    <circle cx="50" cy="50" r="48" fill="none" stroke="#a5d8ff" stroke-width="4"/>
+                    <path d="M25 65 L42 35 L50 55 L58 35 L75 65" stroke="#0055a4" stroke-width="8" fill="none" stroke-linejoin="round" stroke-linecap="round"/>
+                </svg>
+                <h1 id="print-title" class="text-2xl font-bold text-gray-800"></h1>
+            </div>
+            <div class="my-10">
+                <p class="text-lg text-gray-700">Grazie alla nostra soluzione finanziaria puoi avere</p>
+                <p id="print-model" class="text-xl font-bold text-gray-900 mt-1"></p>
+                <p class="text-lg text-gray-700 mt-4">con un ANTICIPO di <span id="print-anticipo" class="font-bold"></span></p>
+            </div>
+            <div class="bg-gray-100 p-6 rounded-lg my-10">
+                <p class="text-lg text-gray-700">Il tuo costo di guida mensile comprensivo di servizi sarà:</p>
+                <div class="flex items-center justify-center space-x-4 mt-4">
+                    <span class="text-5xl font-bold text-blue-700" id="print-rata"></span>
+                    <span class="text-xl text-gray-600">x <span id="print-num-rate"></span> MESI</span>
+                </div>
+            </div>
+            <div id="print-vfg-section" class="my-10">
+                <p class="text-lg text-gray-700">Al termine del contratto potrai SOSTITUIRE la vettura con un'altra e provvederemo per te al saldo del Valore Futuro Garantito pari a:</p>
+                <p class="text-3xl font-bold text-gray-900 mt-2" id="print-vfg"></p>
+            </div>
+            <div>
+                <p id="print-footer-note" class="text-md text-gray-600">Altrimenti potrai scegliere di restituire la vettura o tenerla procedendo al saldo del Valore Futuro Garantito.</p>
+                <p class="text-xs text-gray-500 mt-4">Per tutti i costi relativi al finanziamento, si rimanda al Modulo "INFORMAZIONI EUROPEE DI BASE SUL CREDITO AI CONSUMATORI".</p>
+            </div>
+        </div>
+    </div>
+
+
+    <script>
+        // Variabile globale per conservare i dati dell'ultimo calcolo
+        let lastCalculationData = null;
+
+        const form = document.getElementById('loan-form');
+        const prezzoInput = document.getElementById('prezzo');
+        const anticipoPercentSelect = document.getElementById('anticipo_percent');
+        const anticipoManualeInput = document.getElementById('anticipo_manuale');
+        const anticipoError = document.getElementById('anticipo-error');
+        const tipoFinanziamentoInput = document.getElementById('tipo_finanziamento');
+        const btnPvv = document.getElementById('btn-pvv');
+        const btnMultimake = document.getElementById('btn-multimake');
+        const btnClassico = document.getElementById('btn-classico');
+        const optionsPvvCommon = document.getElementById('options-pvv-common');
+        const optionsClassico = document.getElementById('options-classico');
+        const tanOptionsContainer = document.getElementById('tan-options-container');
+        const tanPvvOptions = document.getElementById('tan-pvv-options');
+        const tanMultimakeDisplay = document.getElementById('tan-multimake-display');
+        const tanAlert = document.getElementById('tan-alert');
+        const durataPvvSlider = document.getElementById('durata_pvv');
+        const durataPvvValueSpan = document.getElementById('durata-pvv-value');
+        const durataPvvLabels = document.getElementById('durata-pvv-labels');
+        const durataClassicoSlider = document.getElementById('durata_classico');
+        const durataClassicoValueSpan = document.getElementById('durata-classico-value');
+        const vfgSlider = document.getElementById('vfg');
+        const vfgValueSpan = document.getElementById('vfg-value');
+        const servizioFurtoCheckbox = document.getElementById('servizio_furto');
+        const furtoOptionsDiv = document.getElementById('furto_options');
+        const servizioGapCheckbox = document.getElementById('servizio_gap');
+        const servizioAlterEgoCheckbox = document.getElementById('servizio_alter_ego');
+        const servizioPersonalSafeCheckbox = document.getElementById('servizio_personal_safe');
+        const manutenzioneContainer = document.getElementById('manutenzione-container');
+        const tagliandiOptions = document.getElementById('tagliandi-options');
+        const risultatiContainer = document.getElementById('risultati-container');
+        const printButton = document.getElementById('print-button');
+        const usuraAlert = document.getElementById('usura-alert');
+        const rataContainer = document.getElementById('rata-container');
+        
+        const formatCurrency = (value) => new Intl.NumberFormat('it-IT', { style: 'currency', currency: 'EUR' }).format(value);
+
+        const populateAnticipoSelect = (maxPercent) => {
+            anticipoPercentSelect.innerHTML = '';
+            for (let i = 0; i <= maxPercent; i += 5) {
+                const option = document.createElement('option');
+                option.value = i;
+                option.textContent = `${i}%`;
+                anticipoPercentSelect.appendChild(option);
+            }
+        };
+
+        const switchMode = (mode) => {
+            tipoFinanziamentoInput.value = mode;
+            [btnPvv, btnMultimake, btnClassico].forEach(btn => btn.classList.remove('active'));
+            
+            optionsPvvCommon.style.display = 'none';
+            optionsClassico.style.display = 'none';
+            tanOptionsContainer.style.display = 'none';
+            manutenzioneContainer.style.display = 'none';
+
+            if (mode === 'pvv' || mode === 'multimake') {
+                optionsPvvCommon.style.display = 'block';
+                anticipoPercentSelect.style.display = 'block';
+                anticipoManualeInput.classList.replace('w-full', 'w-2/3');
+                tanOptionsContainer.style.display = 'block';
+                
+                if (mode === 'pvv') {
+                    btnPvv.classList.add('active');
+                    populateAnticipoSelect(35);
+                    anticipoError.textContent = "L'anticipo non può superare il 35%.";
+                    tanPvvOptions.style.display = 'flex';
+                    tanMultimakeDisplay.style.display = 'none';
+                    manutenzioneContainer.style.display = 'block';
+                    durataPvvSlider.max = 36;
+                    durataPvvLabels.innerHTML = '<span>24</span><span>36</span>';
+                } else { // multimake
+                    btnMultimake.classList.add('active');
+                    populateAnticipoSelect(30);
+                    anticipoError.textContent = "L'anticipo non può superare il 30%.";
+                    tanPvvOptions.style.display = 'none';
+                    tanMultimakeDisplay.style.display = 'block';
+                    durataPvvSlider.max = 48;
+                    durataPvvLabels.innerHTML = '<span>24</span><span>36</span><span>48</span>';
+                }
+                 if (parseInt(durataPvvSlider.value) > parseInt(durataPvvSlider.max)) {
+                    durataPvvSlider.value = durataPvvSlider.max;
+                }
+                durataPvvSlider.dispatchEvent(new Event('input'));
+
+            } else { // classico
+                btnClassico.classList.add('active');
+                optionsClassico.style.display = 'block';
+                anticipoPercentSelect.style.display = 'none';
+                anticipoManualeInput.classList.replace('w-2/3', 'w-full');
+                anticipoError.textContent = "";
+            }
+            anticipoPercentSelect.dispatchEvent(new Event('change'));
+            validateAnticipo();
+        };
+
+        const validateAnticipo = () => {
+            const prezzo = parseFloat(prezzoInput.value) || 0;
+            const anticipo = parseFloat(anticipoManualeInput.value) || 0;
+            const mode = tipoFinanziamentoInput.value;
+            let maxPercent = 1; // No limit for 'classico'
+            if (mode === 'pvv') maxPercent = 0.35;
+            if (mode === 'multimake') maxPercent = 0.30;
+            
+            const maxAnticipo = prezzo * maxPercent;
+            
+            if (prezzo > 0 && anticipo > maxAnticipo && mode !== 'classico') {
+                anticipoError.style.display = 'block';
+                anticipoManualeInput.classList.add('border-red-500');
+                return false;
+            }
+            
+            anticipoError.style.display = 'none';
+            anticipoManualeInput.classList.remove('border-red-500');
+            return true;
+        };
+
+        btnPvv.addEventListener('click', () => switchMode('pvv'));
+        btnMultimake.addEventListener('click', () => switchMode('multimake'));
+        btnClassico.addEventListener('click', () => switchMode('classico'));
+        
+        prezzoInput.addEventListener('input', () => {
+             if (['pvv', 'multimake'].includes(tipoFinanziamentoInput.value)) { 
+                anticipoPercentSelect.dispatchEvent(new Event('change')); 
+             }
+             validateAnticipo();
+        });
+        anticipoPercentSelect.addEventListener('change', () => {
+            const prezzo = parseFloat(prezzoInput.value) || 0;
+            const percent = parseFloat(anticipoPercentSelect.value);
+            anticipoManualeInput.value = ((prezzo * percent) / 100).toFixed(2);
+            validateAnticipo();
+        });
+        anticipoManualeInput.addEventListener('input', () => {
+            const prezzo = parseFloat(prezzoInput.value) || 0;
+            if (prezzo > 0 && ['pvv', 'multimake'].includes(tipoFinanziamentoInput.value)) {
+                const anticipoManuale = parseFloat(anticipoManualeInput.value) || 0;
+                const percentCalcolata = (anticipoManuale / prezzo) * 100;
+                const closestOption = [...anticipoPercentSelect.options].reduce((prev, curr) => 
+                    Math.abs(curr.value - percentCalcolata) < Math.abs(prev.value - percentCalcolata) ? curr : prev
+                );
+                anticipoPercentSelect.value = closestOption.value;
+            }
+            validateAnticipo();
+        });
+
+        document.querySelectorAll('input[name="tasso"]').forEach(radio => {
+            radio.addEventListener('change', (e) => {
+                tanAlert.classList.toggle('hidden', e.target.value !== '7.99');
+            });
+        });
+
+        document.querySelectorAll('input[name="tipo_motore"]').forEach(radio => {
+            radio.addEventListener('change', (e) => {
+                tagliandiOptions.style.display = e.target.value === 'diesel_benzina' ? 'block' : 'none';
+            });
+        });
+
+        durataPvvSlider.addEventListener('input', (e) => { durataPvvValueSpan.textContent = `${e.target.value} mesi`; });
+        durataClassicoSlider.addEventListener('input', (e) => { durataClassicoValueSpan.textContent = `${e.target.value} mesi`; });
+        vfgSlider.addEventListener('input', (e) => { vfgValueSpan.textContent = `${e.target.value}%`; });
+        servizioFurtoCheckbox.addEventListener('change', (e) => { furtoOptionsDiv.classList.toggle('hidden', !e.target.checked); });
+        
+        function calculateIRR(cashFlows, guess = 0.01) {
+            const maxIterations = 1000;
+            const precision = 1e-7;
+            let rate = guess;
+            for (let i = 0; i < maxIterations; i++) {
+                let npv = 0;
+                let derivative = 0;
+                for (let t = 0; t < cashFlows.length; t++) {
+                    npv += cashFlows[t] / Math.pow(1 + rate, t);
+                    if (t > 0) {
+                        derivative -= t * cashFlows[t] / Math.pow(1 + rate, t + 1);
+                    }
+                }
+                if (Math.abs(derivative) < precision) break;
+                const newRate = rate - npv / derivative;
+                if (Math.abs(newRate - rate) < precision) return newRate;
+                rate = newRate;
+            }
+            return null;
+        }
+        
+        const populatePrintPage = (data) => {
+            document.getElementById('print-title').textContent = data.tipoFinanziamento === 'pvv' ? 'PROGETTO VALORE VOLKSWAGEN' : 'FINANZIAMENTO MULTIMAKE';
+            document.getElementById('print-model').textContent = `VOLKSWAGEN ${data.modelloVeicolo}`;
+            document.getElementById('print-anticipo').textContent = formatCurrency(data.anticipoEuro);
+            document.getElementById('print-rata').textContent = formatCurrency(data.rataMensile);
+            document.getElementById('print-num-rate').textContent = data.numeroRate;
+            
+            const printVfgSection = document.getElementById('print-vfg-section');
+            const printFooterNote = document.getElementById('print-footer-note');
+
+            if (data.tipoFinanziamento === 'pvv' || data.tipoFinanziamento === 'multimake') {
+                document.getElementById('print-vfg').textContent = formatCurrency(data.vfgEuro);
+                printVfgSection.style.display = 'block';
+                printFooterNote.style.display = 'block';
+            } else {
+                printVfgSection.style.display = 'none';
+                printFooterNote.style.display = 'none';
+            }
+        };
+
+        form.addEventListener('submit', (e) => {
+            e.preventDefault();
+            if (!validateAnticipo()) {
+                alert("L'anticipo inserito non è valido. Correggere prima di procedere.");
+                return;
+            }
+
+            const tipoFinanziamento = tipoFinanziamentoInput.value;
+            const nomeCliente = document.getElementById('nome_cliente').value || "Cliente";
+            const modelloVeicolo = document.getElementById('modello_veicolo').value || "Veicolo Selezionato";
+            const prezzoVeicolo = parseFloat(prezzoInput.value);
+            if (isNaN(prezzoVeicolo) || prezzoVeicolo <= 0) {
+                alert("Inserisci un prezzo del veicolo valido.");
+                return;
+            }
+            const anticipoEuro = parseFloat(anticipoManualeInput.value) || 0;
+            const speseIstruttoria = 360;
+            let rataMensile, numeroRate, durataMesi, tassoAnnuale, vfgEuro = 0, vfgPercent = 0;
+
+            if (tipoFinanziamento === 'classico') {
+                durataMesi = parseInt(durataClassicoSlider.value);
+            } else {
+                durataMesi = parseInt(durataPvvSlider.value);
+            }
+            
+            let costoServizi = 0;
+            if (servizioFurtoCheckbox.checked) {
+                const pacchettoFurto = document.querySelector('input[name="furto_pacchetto"]:checked').value;
+                const durataServiziMesi = parseInt(document.getElementById('servizi-durata').value);
+                const costoAnnuoPerMille = (pacchettoFurto === 'first_trip') ? 11 : 18;
+                costoServizi += (prezzoVeicolo / 1000) * costoAnnuoPerMille * (durataServiziMesi / 12);
+            }
+            if (servizioGapCheckbox.checked) { costoServizi += 19 * durataMesi; }
+            if (servizioAlterEgoCheckbox.checked) { costoServizi += 18 * durataMesi; }
+            if (servizioPersonalSafeCheckbox.checked) { costoServizi += 16 * durataMesi; }
+
+            if (tipoFinanziamento === 'pvv') {
+                const tipoMotore = document.querySelector('input[name="tipo_motore"]:checked').value;
+                if (tipoMotore === 'diesel_benzina') {
+                    const numTagliandi = document.querySelector('input[name="numero_tagliandi"]:checked').value;
+                    costoServizi += (numTagliandi === '1' ? 5 : 13) * durataMesi;
+                } else { // up_metano_plugin
+                    costoServizi += 13 * durataMesi;
+                }
+            }
+
+            const importoTotaleFinanziato = (prezzoVeicolo - anticipoEuro) + speseIstruttoria + costoServizi;
+            const cashFlows = [importoTotaleFinanziato];
+
+            if (tipoFinanziamento === 'pvv' || tipoFinanziamento === 'multimake') {
+                tassoAnnuale = (tipoFinanziamento === 'pvv') ? parseFloat(document.querySelector('input[name="tasso"]:checked').value) : 10.99;
+                vfgPercent = parseFloat(vfgSlider.value);
+                vfgEuro = prezzoVeicolo * (vfgPercent / 100);
+                numeroRate = durataMesi - 1;
+                const tassoMensile = (tassoAnnuale / 100) / 12;
+                const P = importoTotaleFinanziato, FV = vfgEuro, r = tassoMensile, n = numeroRate;
+                const fattoreAttualizzazioneFV = FV / Math.pow(1 + r, n);
+                const capitaleDaAmortizzare = P - fattoreAttualizzazioneFV;
+                const fattoreAnnuita = (r * Math.pow(1 + r, n)) / (Math.pow(1 + r, n) - 1);
+                rataMensile = capitaleDaAmortizzare * fattoreAnnuita;
+                
+                for(let i=0; i<numeroRate; i++) cashFlows.push(-rataMensile);
+                cashFlows.push(-vfgEuro);
+
+            } else { // Credito Classico
+                tassoAnnuale = 10.49;
+                numeroRate = durataMesi;
+                const tassoMensile = (tassoAnnuale / 100) / 12;
+                const P = importoTotaleFinanziato, r = tassoMensile, n = numeroRate;
+                rataMensile = P * (r * Math.pow(1 + r, n)) / (Math.pow(1 + r, n) - 1);
+                for(let i=0; i<numeroRate; i++) cashFlows.push(-rataMensile);
+            }
+            
+            const monthlyIRR = calculateIRR(cashFlows);
+            const taeg = monthlyIRR ? monthlyIRR * 12 : null;
+            const sogliaUsura = 0.17; 
+
+            lastCalculationData = { tipoFinanziamento, nomeCliente, modelloVeicolo, prezzoVeicolo, anticipoEuro, rataMensile, numeroRate, vfgEuro };
+            
+            document.getElementById('res-nome-cliente').textContent = nomeCliente;
+            document.getElementById('res-prezzo').textContent = formatCurrency(prezzoVeicolo);
+            const anticipoPercentualeCalcolato = prezzoVeicolo > 0 ? (anticipoEuro / prezzoVeicolo * 100).toFixed(2) : 0;
+            document.getElementById('res-anticipo').textContent = `${formatCurrency(anticipoEuro)} (${anticipoPercentualeCalcolato}%)`;
+            document.getElementById('res-spese-istruttoria').textContent = formatCurrency(speseIstruttoria);
+            document.getElementById('res-costo-servizi').textContent = formatCurrency(costoServizi);
+            document.getElementById('res-importo-finanziato').textContent = formatCurrency(importoTotaleFinanziato);
+            document.getElementById('res-durata').textContent = `${durataMesi} mesi`;
+            document.getElementById('res-tan').textContent = `${tassoAnnuale.toFixed(2)}%`;
+            document.getElementById('res-taeg').textContent = taeg ? `${(taeg * 100).toFixed(2)}%` : 'N/A';
+            
+            if (taeg && taeg > sogliaUsura) {
+                usuraAlert.classList.remove('hidden');
+                rataContainer.classList.add('hidden');
+                document.getElementById('res-maxi-rata-container').style.display = 'none';
+            } else {
+                usuraAlert.classList.add('hidden');
+                rataContainer.classList.remove('hidden');
+                document.getElementById('res-rata-mensile').textContent = formatCurrency(rataMensile);
+                
+                if (tipoFinanziamento === 'pvv' || tipoFinanziamento === 'multimake') {
+                    document.getElementById('res-numero-rate').textContent = `per ${numeroRate} mesi`;
+                    document.getElementById('res-vfg').textContent = `${formatCurrency(vfgEuro)} (${vfgPercent}%)`;
+                    document.getElementById('res-maxi-rata').textContent = formatCurrency(vfgEuro);
+                    document.getElementById('res-vfg-container').style.display = 'flex';
+                    document.getElementById('res-maxi-rata-container').style.display = 'block';
+                } else {
+                    document.getElementById('res-numero-rate').textContent = `per ${numeroRate} mesi`;
+                    document.getElementById('res-vfg-container').style.display = 'none';
+                    document.getElementById('res-maxi-rata-container').style.display = 'none';
+                }
+            }
+            risultatiContainer.classList.remove('hidden');
+        });
+
+        printButton.addEventListener('click', () => {
+            if (!lastCalculationData) {
+                alert("Calcola prima un preventivo.");
+                return;
+            }
+            if (['pvv', 'multimake'].includes(lastCalculationData.tipoFinanziamento)) {
+                populatePrintPage(lastCalculationData);
+                setTimeout(() => {
+                    window.print();
+                }, 100);
+            } else {
+                alert("La stampa personalizzata è disponibile solo per le modalità con Valore Futuro Garantito.");
+            }
+        });
+
+        switchMode('pvv');
+    </script>
+</body>
+</html>
