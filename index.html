@@ -74,16 +74,34 @@
                         </div>
                         <div>
                             <label for="vfg" class="block text-sm font-medium text-gray-700">Valore Futuro Garantito (VFG): <span id="vfg-value" class="font-bold text-blue-600">45%</span></label>
-                            <input type="range" id="vfg" min="30" max="65" value="45" class="w-full">
+                            <input type="range" id="vfg" min="30" max="75" value="45" class="w-full">
+                        </div>
+                    </div>
+
+                    <!-- Sezione Tipo Vettura per PVV -->
+                    <div id="tipo-vettura-container" class="hidden">
+                        <span class="block text-sm font-medium text-gray-700">Tipo Vettura</span>
+                        <div class="mt-2 flex space-x-4">
+                            <label class="inline-flex items-center"><input type="radio" name="tipo_vettura" value="usato" class="form-radio text-blue-600" checked><span class="ml-2">Usato</span></label>
+                            <label class="inline-flex items-center"><input type="radio" name="tipo_vettura" value="nuovo" class="form-radio text-blue-600"><span class="ml-2">Nuovo</span></label>
                         </div>
                     </div>
 
                     <div id="tan-options-container">
                         <span class="block text-sm font-medium text-gray-700">Tasso di Interesse (TAN)</span>
-                        <div id="tan-pvv-options" class="mt-2 flex space-x-4">
-                            <label class="inline-flex items-center"><input type="radio" name="tasso" value="7.99" class="form-radio text-blue-600"><span class="ml-2">7,99%</span></label>
-                            <label class="inline-flex items-center"><input type="radio" name="tasso" value="9.99" class="form-radio text-blue-600" checked><span class="ml-2">9,99%</span></label>
+                        <!-- Tassi specifici per PVV -->
+                        <div id="tan-pvv-options-container" class="hidden">
+                            <div id="tan-nuovo-options" class="hidden mt-2 flex flex-wrap gap-x-4 gap-y-2">
+                                <label class="inline-flex items-center"><input type="radio" name="tasso_nuovo" value="5.99" class="form-radio text-blue-600"><span class="ml-2">5,99% (Rinnovo)</span></label>
+                                <label class="inline-flex items-center"><input type="radio" name="tasso_nuovo" value="6.99" class="form-radio text-blue-600" checked><span class="ml-2">6,99%</span></label>
+                                <label class="inline-flex items-center"><input type="radio" name="tasso_nuovo" value="7.99" class="form-radio text-blue-600"><span class="ml-2">7,99%</span></label>
+                            </div>
+                            <div id="tan-usato-options" class="hidden mt-2 flex flex-wrap gap-x-4 gap-y-2">
+                                <label class="inline-flex items-center"><input type="radio" name="tasso_usato" value="7.99" class="form-radio text-blue-600"><span class="ml-2">7,99%</span></label>
+                                <label class="inline-flex items-center"><input type="radio" name="tasso_usato" value="9.99" class="form-radio text-blue-600" checked><span class="ml-2">9,99%</span></label>
+                            </div>
                         </div>
+                        <!-- Tasso per Multimake -->
                         <div id="tan-multimake-display" class="hidden mt-2">
                             <p class="text-gray-800 font-semibold">10,99%</p>
                         </div>
@@ -178,45 +196,14 @@
                         </div>
                     </div>
                 </div>
-                <button id="print-button" class="mt-8 w-full bg-gray-700 text-white font-bold py-3 px-4 rounded-lg hover:bg-gray-800">Stampa Riepilogo</button>
-            </div>
-        </div>
-    </div>
-
-    <!-- Elemento per la stampa, invisibile di default -->
-    <div id="print-page" class="hidden">
-        <div class="flex flex-col h-full justify-between text-center">
-            <div>
-                <svg class="w-48 h-48 mx-auto mb-8" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
-                    <circle cx="50" cy="50" r="48" fill="none" stroke="#a5d8ff" stroke-width="4"/>
-                    <path d="M25 65 L42 35 L50 55 L58 35 L75 65" stroke="#0055a4" stroke-width="8" fill="none" stroke-linejoin="round" stroke-linecap="round"/>
-                </svg>
-                <h1 id="print-title" class="text-2xl font-bold text-gray-800"></h1>
-            </div>
-            <div class="my-10">
-                <p class="text-lg text-gray-700">Grazie alla nostra soluzione finanziaria puoi avere</p>
-                <p id="print-model" class="text-xl font-bold text-gray-900 mt-1"></p>
-                <p class="text-lg text-gray-700 mt-4">con un ANTICIPO di <span id="print-anticipo" class="font-bold"></span></p>
-            </div>
-            <div class="bg-gray-100 p-6 rounded-lg my-10">
-                <p class="text-lg text-gray-700">Il tuo costo di guida mensile comprensivo di servizi sarà:</p>
-                <div class="flex items-center justify-center space-x-4 mt-4">
-                    <span class="text-5xl font-bold text-blue-700" id="print-rata"></span>
-                    <span class="text-xl text-gray-600">x <span id="print-num-rate"></span> MESI</span>
+                <div class="flex gap-4 mt-8">
+                    <button id="new-sim-button" class="w-1/2 bg-gray-300 text-gray-800 font-bold py-3 px-4 rounded-lg hover:bg-gray-400">Nuova Simulazione</button>
+                    <button id="print-button" class="w-1/2 bg-gray-700 text-white font-bold py-3 px-4 rounded-lg hover:bg-gray-800">Stampa Riepilogo</button>
                 </div>
             </div>
-            <div id="print-vfg-section" class="my-10">
-                <p class="text-lg text-gray-700">Al termine del contratto potrai SOSTITUIRE la vettura con un'altra e provvederemo per te al saldo del Valore Futuro Garantito pari a:</p>
-                <p class="text-3xl font-bold text-gray-900 mt-2" id="print-vfg"></p>
-            </div>
-            <div>
-                <p id="print-footer-note" class="text-md text-gray-600">Altrimenti potrai scegliere di restituire la vettura o tenerla procedendo al saldo del Valore Futuro Garantito.</p>
-                <p class="text-xs text-gray-500 mt-4">Per tutti i costi relativi al finanziamento, si rimanda al Modulo "INFORMAZIONI EUROPEE DI BASE SUL CREDITO AI CONSUMATORI".</p>
-            </div>
         </div>
     </div>
-
-
+    
     <script>
         // Variabile globale per conservare i dati dell'ultimo calcolo
         let lastCalculationData = null;
@@ -232,8 +219,11 @@
         const btnClassico = document.getElementById('btn-classico');
         const optionsPvvCommon = document.getElementById('options-pvv-common');
         const optionsClassico = document.getElementById('options-classico');
+        const tipoVetturaContainer = document.getElementById('tipo-vettura-container');
         const tanOptionsContainer = document.getElementById('tan-options-container');
-        const tanPvvOptions = document.getElementById('tan-pvv-options');
+        const tanPvvOptionsContainer = document.getElementById('tan-pvv-options-container');
+        const tanNuovoOptions = document.getElementById('tan-nuovo-options');
+        const tanUsatoOptions = document.getElementById('tan-usato-options');
         const tanMultimakeDisplay = document.getElementById('tan-multimake-display');
         const tanAlert = document.getElementById('tan-alert');
         const durataPvvSlider = document.getElementById('durata_pvv');
@@ -252,6 +242,7 @@
         const tagliandiOptions = document.getElementById('tagliandi-options');
         const risultatiContainer = document.getElementById('risultati-container');
         const printButton = document.getElementById('print-button');
+        const newSimButton = document.getElementById('new-sim-button');
         const usuraAlert = document.getElementById('usura-alert');
         const rataContainer = document.getElementById('rata-container');
         
@@ -266,6 +257,20 @@
                 anticipoPercentSelect.appendChild(option);
             }
         };
+        
+        const updatePvvTanVisibility = () => {
+            const tipoVettura = document.querySelector('input[name="tipo_vettura"]:checked').value;
+            if (tipoVettura === 'nuovo') {
+                tanNuovoOptions.style.display = 'flex';
+                tanUsatoOptions.style.display = 'none';
+            } else {
+                tanNuovoOptions.style.display = 'none';
+                tanUsatoOptions.style.display = 'flex';
+            }
+            // Trigger change event to update the alert
+            const visibleRadios = document.querySelector('input[name^="tasso"]:checked');
+            if(visibleRadios) visibleRadios.dispatchEvent(new Event('change', { bubbles: true }));
+        };
 
         const switchMode = (mode) => {
             tipoFinanziamentoInput.value = mode;
@@ -275,6 +280,8 @@
             optionsClassico.style.display = 'none';
             tanOptionsContainer.style.display = 'none';
             manutenzioneContainer.style.display = 'none';
+            tipoVetturaContainer.style.display = 'none';
+            tanPvvOptionsContainer.style.display = 'none';
 
             if (mode === 'pvv' || mode === 'multimake') {
                 optionsPvvCommon.style.display = 'block';
@@ -286,16 +293,18 @@
                     btnPvv.classList.add('active');
                     populateAnticipoSelect(35);
                     anticipoError.textContent = "L'anticipo non può superare il 35%.";
-                    tanPvvOptions.style.display = 'flex';
+                    tanPvvOptionsContainer.style.display = 'block';
                     tanMultimakeDisplay.style.display = 'none';
                     manutenzioneContainer.style.display = 'block';
+                    tipoVetturaContainer.style.display = 'block';
                     durataPvvSlider.max = 36;
                     durataPvvLabels.innerHTML = '<span>24</span><span>36</span>';
+                    updatePvvTanVisibility();
                 } else { // multimake
                     btnMultimake.classList.add('active');
                     populateAnticipoSelect(30);
                     anticipoError.textContent = "L'anticipo non può superare il 30%.";
-                    tanPvvOptions.style.display = 'none';
+                    tanPvvOptionsContainer.style.display = 'none';
                     tanMultimakeDisplay.style.display = 'block';
                     durataPvvSlider.max = 48;
                     durataPvvLabels.innerHTML = '<span>24</span><span>36</span><span>48</span>';
@@ -365,11 +374,14 @@
             }
             validateAnticipo();
         });
-
-        document.querySelectorAll('input[name="tasso"]').forEach(radio => {
-            radio.addEventListener('change', (e) => {
-                tanAlert.classList.toggle('hidden', e.target.value !== '7.99');
-            });
+        
+        document.querySelectorAll('input[name="tipo_vettura"]').forEach(radio => radio.addEventListener('change', updatePvvTanVisibility));
+        
+        tanOptionsContainer.addEventListener('change', (e) => {
+             if (e.target.matches('input[type="radio"]')) {
+                const selectedValue = e.target.value;
+                tanAlert.classList.toggle('hidden', selectedValue !== '7.99');
+            }
         });
 
         document.querySelectorAll('input[name="tipo_motore"]').forEach(radio => {
@@ -403,27 +415,19 @@
             }
             return null;
         }
-        
-        const populatePrintPage = (data) => {
-            document.getElementById('print-title').textContent = data.tipoFinanziamento === 'pvv' ? 'PROGETTO VALORE VOLKSWAGEN' : 'FINANZIAMENTO MULTIMAKE';
-            document.getElementById('print-model').textContent = `VOLKSWAGEN ${data.modelloVeicolo}`;
-            document.getElementById('print-anticipo').textContent = formatCurrency(data.anticipoEuro);
-            document.getElementById('print-rata').textContent = formatCurrency(data.rataMensile);
-            document.getElementById('print-num-rate').textContent = data.numeroRate;
-            
-            const printVfgSection = document.getElementById('print-vfg-section');
-            const printFooterNote = document.getElementById('print-footer-note');
 
-            if (data.tipoFinanziamento === 'pvv' || data.tipoFinanziamento === 'multimake') {
-                document.getElementById('print-vfg').textContent = formatCurrency(data.vfgEuro);
-                printVfgSection.style.display = 'block';
-                printFooterNote.style.display = 'block';
-            } else {
-                printVfgSection.style.display = 'none';
-                printFooterNote.style.display = 'none';
-            }
+        const resetFormAndUI = () => {
+            form.reset();
+            risultatiContainer.classList.add('hidden');
+            switchMode('pvv'); // Ritorna alla modalità di default
+            // Aggiorna manualmente i valori visualizzati degli slider e altri controlli
+            durataPvvSlider.dispatchEvent(new Event('input'));
+            durataClassicoSlider.dispatchEvent(new Event('input'));
+            vfgSlider.dispatchEvent(new Event('input'));
         };
 
+        newSimButton.addEventListener('click', resetFormAndUI);
+        
         form.addEventListener('submit', (e) => {
             e.preventDefault();
             if (!validateAnticipo()) {
@@ -441,7 +445,7 @@
             }
             const anticipoEuro = parseFloat(anticipoManualeInput.value) || 0;
             const speseIstruttoria = 360;
-            let rataMensile, numeroRate, durataMesi, tassoAnnuale, vfgEuro = 0, vfgPercent = 0;
+            let rataMensile, numeroRate, durataMesi, vfgEuro = 0, vfgPercent = 0, tassoAnnuale;
 
             if (tipoFinanziamento === 'classico') {
                 durataMesi = parseInt(durataClassicoSlider.value);
@@ -474,7 +478,14 @@
             const cashFlows = [importoTotaleFinanziato];
 
             if (tipoFinanziamento === 'pvv' || tipoFinanziamento === 'multimake') {
-                tassoAnnuale = (tipoFinanziamento === 'pvv') ? parseFloat(document.querySelector('input[name="tasso"]:checked').value) : 10.99;
+                if (tipoFinanziamento === 'pvv') {
+                    const tipoVettura = document.querySelector('input[name="tipo_vettura"]:checked').value;
+                    const name = tipoVettura === 'nuovo' ? 'tasso_nuovo' : 'tasso_usato';
+                    tassoAnnuale = parseFloat(document.querySelector(`input[name="${name}"]:checked`).value);
+                } else {
+                    tassoAnnuale = 10.99;
+                }
+
                 vfgPercent = parseFloat(vfgSlider.value);
                 vfgEuro = prezzoVeicolo * (vfgPercent / 100);
                 numeroRate = durataMesi - 1;
@@ -501,7 +512,7 @@
             const taeg = monthlyIRR ? monthlyIRR * 12 : null;
             const sogliaUsura = 0.17; 
 
-            lastCalculationData = { tipoFinanziamento, nomeCliente, modelloVeicolo, prezzoVeicolo, anticipoEuro, rataMensile, numeroRate, vfgEuro };
+            lastCalculationData = { tipoFinanziamento, nomeCliente, modelloVeicolo, prezzoVeicolo, anticipoEuro, rataMensile, numeroRate, vfgEuro, vfgPercent, durataMesi, tassoAnnuale, costoServizi, speseIstruttoria, importoTotaleFinanziato, taeg };
             
             document.getElementById('res-nome-cliente').textContent = nomeCliente;
             document.getElementById('res-prezzo').textContent = formatCurrency(prezzoVeicolo);
@@ -538,16 +549,79 @@
             risultatiContainer.classList.remove('hidden');
         });
 
+        const generatePrintContent = (data) => {
+            const printTitle = data.tipoFinanziamento === 'pvv' ? 'PROGETTO VALORE VOLKSWAGEN' : 'FINANZIAMENTO MULTIMAKE';
+            const printModel = `VOLKSWAGEN ${data.modelloVeicolo}`;
+            const printAnticipo = formatCurrency(data.anticipoEuro);
+            const printRata = formatCurrency(data.rataMensile);
+            const printNumRate = data.numeroRate;
+            const printVfg = formatCurrency(data.vfgEuro);
+            
+            let vfgSection = '';
+            if (data.tipoFinanziamento === 'pvv' || data.tipoFinanziamento === 'multimake') {
+                vfgSection = `
+                    <div class="my-10">
+                        <p class="text-lg text-gray-700">Al termine del contratto potrai SOSTITUIRE la vettura con un'altra e provvederemo per te al saldo del Valore Futuro Garantito pari a:</p>
+                        <p class="text-3xl font-bold text-gray-900 mt-2">${printVfg}</p>
+                    </div>
+                    <div>
+                        <p class="text-md text-gray-600">Altrimenti potrai scegliere di restituire la vettura o tenerla procedendo al saldo del Valore Futuro Garantito.</p>
+                    </div>
+                `;
+            }
+
+            return `
+                <html>
+                    <head>
+                        <title>Riepilogo Finanziamento</title>
+                        <script src="https://cdn.tailwindcss.com"><\/script>
+                        <link rel="preconnect" href="https://fonts.googleapis.com">
+                        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+                        <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+                        <style> body { font-family: 'Inter', sans-serif; -webkit-print-color-adjust: exact; } </style>
+                    </head>
+                    <body class="p-8">
+                        <div class="flex flex-col h-full justify-between text-center">
+                            <div>
+                                <svg class="w-48 h-48 mx-auto mb-8" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+                                    <circle cx="50" cy="50" r="48" fill="none" stroke="#a5d8ff" stroke-width="4"/>
+                                    <path d="M25 65 L42 35 L50 55 L58 35 L75 65" stroke="#0055a4" stroke-width="8" fill="none" stroke-linejoin="round" stroke-linecap="round"/>
+                                </svg>
+                                <h1 class="text-2xl font-bold text-gray-800">${printTitle}</h1>
+                            </div>
+                            <div class="my-10">
+                                <p class="text-lg text-gray-700">Grazie alla nostra soluzione finanziaria puoi avere</p>
+                                <p class="text-xl font-bold text-gray-900 mt-1">${printModel}</p>
+                                <p class="text-lg text-gray-700 mt-4">con un ANTICIPO di <span class="font-bold">${printAnticipo}</span></p>
+                            </div>
+                            <div class="bg-gray-100 p-6 rounded-lg my-10">
+                                <p class="text-lg text-gray-700">Il tuo costo di guida mensile comprensivo di servizi sarà:</p>
+                                <div class="flex items-center justify-center space-x-4 mt-4">
+                                    <span class="text-5xl font-bold text-blue-700">${printRata}</span>
+                                    <span class="text-xl text-gray-600">x ${printNumRate} MESI</span>
+                                </div>
+                            </div>
+                            ${vfgSection}
+                            <p class="text-xs text-gray-500 mt-4">Per tutti i costi relativi al finanziamento, si rimanda al Modulo "INFORMAZIONI EUROPEE DI BASE SUL CREDITO AI CONSUMATORI".</p>
+                        </div>
+                        <script>
+                            setTimeout(() => { window.print(); window.close(); }, 250);
+                        <\/script>
+                    </body>
+                </html>
+            `;
+        };
+
         printButton.addEventListener('click', () => {
-            if (!lastCalculationData) {
+             if (!lastCalculationData) {
                 alert("Calcola prima un preventivo.");
                 return;
             }
+
             if (['pvv', 'multimake'].includes(lastCalculationData.tipoFinanziamento)) {
-                populatePrintPage(lastCalculationData);
-                setTimeout(() => {
-                    window.print();
-                }, 100);
+                const printWindow = window.open('', '_blank');
+                printWindow.document.write(generatePrintContent(lastCalculationData));
+                printWindow.document.close();
             } else {
                 alert("La stampa personalizzata è disponibile solo per le modalità con Valore Futuro Garantito.");
             }
