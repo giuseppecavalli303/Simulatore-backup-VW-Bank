@@ -9,9 +9,7 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
-        body {
-            font-family: 'Inter', sans-serif;
-        }
+        body { font-family: 'Inter', sans-serif; }
         input[type=range] { -webkit-appearance: none; width: 100%; background: transparent; }
         input[type=range]:focus { outline: none; }
         input[type=range]::-webkit-slider-runnable-track { width: 100%; height: 8px; cursor: pointer; background: #d1d5db; border-radius: 5px; }
@@ -63,7 +61,7 @@
                             <select id="anticipo_percent" class="block w-1/3 pl-3 pr-10 py-2 text-base border-gray-300 rounded-md"></select>
                             <input type="number" id="anticipo_manuale" class="block w-2/3 px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm" placeholder="Importo manuale">
                         </div>
-                        <p id="anticipo-error" class="error-message mt-1">L'anticipo non può superare il 35%.</p>
+                        <p id="anticipo-error" class="error-message mt-1">L'anticipo non può superare il limite consentito.</p>
                     </div>
                     
                     <div id="options-pvv-common" class="space-y-6">
@@ -78,35 +76,29 @@
                         </div>
                     </div>
 
-                    <!-- Sezione Tipo Vettura per PVV -->
-                    <div id="tipo-vettura-container" class="hidden">
-                        <span class="block text-sm font-medium text-gray-700">Tipo Vettura</span>
-                        <div class="mt-2 flex space-x-4">
-                            <label class="inline-flex items-center"><input type="radio" name="tipo_vettura" value="usato" class="form-radio text-blue-600" checked><span class="ml-2">Usato</span></label>
-                            <label class="inline-flex items-center"><input type="radio" name="tipo_vettura" value="nuovo" class="form-radio text-blue-600"><span class="ml-2">Nuovo</span></label>
-                        </div>
-                    </div>
-
                     <div id="tan-options-container">
                         <span class="block text-sm font-medium text-gray-700">Tasso di Interesse (TAN)</span>
-                        <!-- Tassi specifici per PVV -->
-                        <div id="tan-pvv-options-container" class="hidden">
-                            <div id="tan-nuovo-options" class="hidden mt-2 flex flex-wrap gap-x-4 gap-y-2">
-                                <label class="inline-flex items-center"><input type="radio" name="tasso_nuovo" value="5.99" class="form-radio text-blue-600"><span class="ml-2">5,99% (Rinnovo)</span></label>
-                                <label class="inline-flex items-center"><input type="radio" name="tasso_nuovo" value="6.99" class="form-radio text-blue-600" checked><span class="ml-2">6,99%</span></label>
-                                <label class="inline-flex items-center"><input type="radio" name="tasso_nuovo" value="7.99" class="form-radio text-blue-600"><span class="ml-2">7,99%</span></label>
-                            </div>
-                            <div id="tan-usato-options" class="hidden mt-2 flex flex-wrap gap-x-4 gap-y-2">
-                                <label class="inline-flex items-center"><input type="radio" name="tasso_usato" value="7.99" class="form-radio text-blue-600"><span class="ml-2">7,99%</span></label>
-                                <label class="inline-flex items-center"><input type="radio" name="tasso_usato" value="9.99" class="form-radio text-blue-600" checked><span class="ml-2">9,99%</span></label>
-                            </div>
+                        
+                        <!-- Tasso per PVV -->
+                        <div id="tan-pvv-display" class="hidden mt-2">
+                            <p class="text-gray-800 font-semibold">8,99% <span class="text-xs font-normal text-gray-500">(FMS BD 70)</span></p>
                         </div>
-                        <!-- Tasso per Multimake -->
-                        <div id="tan-multimake-display" class="hidden mt-2">
-                            <p class="text-gray-800 font-semibold">10,99%</p>
+                        
+                        <!-- Tassi per Multimake -->
+                        <div id="tan-multimake-options" class="hidden mt-2 flex flex-col gap-2">
+                            <label class="inline-flex items-center">
+                                <input type="radio" name="tasso_multimake" value="11.49" class="form-radio text-blue-600" checked>
+                                <span class="ml-2 text-sm text-gray-800">11,49% - Standard <span class="text-xs text-gray-500">(MMPCP24 - Max 10 anni, BD 90)</span></span>
+                            </label>
+                            <label class="inline-flex items-center">
+                                <input type="radio" name="tasso_multimake" value="9.99" class="form-radio text-blue-600">
+                                <span class="ml-2 text-sm text-gray-800">9,99% - VTI / Tedesche <span class="text-xs text-gray-500">(MMPCP25 - Cl. 30 e 34, BD 90)</span></span>
+                            </label>
                         </div>
-                        <div id="tan-alert" class="hidden mt-2 p-2 bg-yellow-100 border-l-4 border-yellow-500 text-yellow-700 text-sm rounded-md">
-                            <p>Assicurati che la vettura sia una KM0 o una Classe 32 idonea.</p>
+                        
+                        <!-- Tasso per Classico -->
+                        <div id="tan-classico-display" class="hidden mt-2">
+                            <p class="text-gray-800 font-semibold">10,99% <span class="text-xs font-normal text-gray-500">(FU1 BD 100)</span></p>
                         </div>
                     </div>
 
@@ -170,8 +162,8 @@
                     <p class="text-gray-600 mb-6" id="res-nome-cliente"></p>
                     <div class="space-y-4 text-sm">
                         <div id="usura-alert" class="hidden mt-4 p-4 bg-red-100 border-l-4 border-red-500 text-red-700 text-sm rounded-md">
-                            <p class="font-bold">ATTENZIONE: Tasso di Usura Superato</p>
-                            <p>Il TAEG calcolato per questa operazione supera la soglia legale. Modificare i parametri del finanziamento.</p>
+                            <p class="font-bold">ATTENZIONE: Verifica Soglia Usura</p>
+                            <p>Con l'attuale piano tassi e l'inclusione di servizi accessori, il TAEG potrebbe superare la soglia d'usura della Banca d'Italia. Verifica il TAEG sul sistema ufficiale VW Bank.</p>
                         </div>
                         <div class="flex justify-between items-center"><span class="text-gray-600">Prezzo Veicolo:</span><span id="res-prezzo" class="font-semibold text-gray-800"></span></div>
                         <div class="flex justify-between items-center"><span class="text-gray-600">Anticipo Versato:</span><span id="res-anticipo" class="font-semibold text-gray-800"></span></div>
@@ -183,7 +175,7 @@
                         <hr>
                         <div class="flex justify-between items-center"><span class="text-gray-600">Durata:</span><span id="res-durata" class="font-semibold text-gray-800"></span></div>
                         <div class="flex justify-between items-center"><span class="text-gray-600">TAN:</span><span id="res-tan" class="font-semibold text-gray-800"></span></div>
-                        <div class="flex justify-between items-center font-bold"><span class="text-gray-800">TAEG:</span><span id="res-taeg" class="text-blue-600"></span></div>
+                        <div class="flex justify-between items-center font-bold"><span class="text-gray-800">TAEG Stimato:</span><span id="res-taeg" class="text-blue-600"></span></div>
                         
                         <div id="rata-container" class="mt-6 p-4 bg-blue-100 rounded-lg text-center">
                             <p class="text-lg text-blue-800">Rata Mensile</p>
@@ -205,7 +197,6 @@
     </div>
     
     <script>
-        // Variabile globale per conservare i dati dell'ultimo calcolo
         let lastCalculationData = null;
 
         const form = document.getElementById('loan-form');
@@ -219,13 +210,12 @@
         const btnClassico = document.getElementById('btn-classico');
         const optionsPvvCommon = document.getElementById('options-pvv-common');
         const optionsClassico = document.getElementById('options-classico');
-        const tipoVetturaContainer = document.getElementById('tipo-vettura-container');
+        
         const tanOptionsContainer = document.getElementById('tan-options-container');
-        const tanPvvOptionsContainer = document.getElementById('tan-pvv-options-container');
-        const tanNuovoOptions = document.getElementById('tan-nuovo-options');
-        const tanUsatoOptions = document.getElementById('tan-usato-options');
-        const tanMultimakeDisplay = document.getElementById('tan-multimake-display');
-        const tanAlert = document.getElementById('tan-alert');
+        const tanPvvDisplay = document.getElementById('tan-pvv-display');
+        const tanMultimakeOptions = document.getElementById('tan-multimake-options');
+        const tanClassicoDisplay = document.getElementById('tan-classico-display');
+        
         const durataPvvSlider = document.getElementById('durata_pvv');
         const durataPvvValueSpan = document.getElementById('durata-pvv-value');
         const durataPvvLabels = document.getElementById('durata-pvv-labels');
@@ -257,20 +247,6 @@
                 anticipoPercentSelect.appendChild(option);
             }
         };
-        
-        const updatePvvTanVisibility = () => {
-            const tipoVettura = document.querySelector('input[name="tipo_vettura"]:checked').value;
-            if (tipoVettura === 'nuovo') {
-                tanNuovoOptions.style.display = 'flex';
-                tanUsatoOptions.style.display = 'none';
-            } else {
-                tanNuovoOptions.style.display = 'none';
-                tanUsatoOptions.style.display = 'flex';
-            }
-            // Trigger change event to update the alert
-            const visibleRadios = document.querySelector('input[name^="tasso"]:checked');
-            if(visibleRadios) visibleRadios.dispatchEvent(new Event('change', { bubbles: true }));
-        };
 
         const switchMode = (mode) => {
             tipoFinanziamentoInput.value = mode;
@@ -278,34 +254,31 @@
             
             optionsPvvCommon.style.display = 'none';
             optionsClassico.style.display = 'none';
-            tanOptionsContainer.style.display = 'none';
+            tanOptionsContainer.style.display = 'block';
+            
+            tanPvvDisplay.style.display = 'none';
+            tanMultimakeOptions.style.display = 'none';
+            tanClassicoDisplay.style.display = 'none';
             manutenzioneContainer.style.display = 'none';
-            tipoVetturaContainer.style.display = 'none';
-            tanPvvOptionsContainer.style.display = 'none';
 
             if (mode === 'pvv' || mode === 'multimake') {
                 optionsPvvCommon.style.display = 'block';
                 anticipoPercentSelect.style.display = 'block';
                 anticipoManualeInput.classList.replace('w-full', 'w-2/3');
-                tanOptionsContainer.style.display = 'block';
                 
                 if (mode === 'pvv') {
                     btnPvv.classList.add('active');
                     populateAnticipoSelect(35);
                     anticipoError.textContent = "L'anticipo non può superare il 35%.";
-                    tanPvvOptionsContainer.style.display = 'block';
-                    tanMultimakeDisplay.style.display = 'none';
+                    tanPvvDisplay.style.display = 'block';
                     manutenzioneContainer.style.display = 'block';
-                    tipoVetturaContainer.style.display = 'block';
                     durataPvvSlider.max = 36;
                     durataPvvLabels.innerHTML = '<span>24</span><span>36</span>';
-                    updatePvvTanVisibility();
                 } else { // multimake
                     btnMultimake.classList.add('active');
                     populateAnticipoSelect(30);
                     anticipoError.textContent = "L'anticipo non può superare il 30%.";
-                    tanPvvOptionsContainer.style.display = 'none';
-                    tanMultimakeDisplay.style.display = 'block';
+                    tanMultimakeOptions.style.display = 'flex';
                     durataPvvSlider.max = 48;
                     durataPvvLabels.innerHTML = '<span>24</span><span>36</span><span>48</span>';
                 }
@@ -317,6 +290,7 @@
             } else { // classico
                 btnClassico.classList.add('active');
                 optionsClassico.style.display = 'block';
+                tanClassicoDisplay.style.display = 'block';
                 anticipoPercentSelect.style.display = 'none';
                 anticipoManualeInput.classList.replace('w-2/3', 'w-full');
                 anticipoError.textContent = "";
@@ -329,7 +303,7 @@
             const prezzo = parseFloat(prezzoInput.value) || 0;
             const anticipo = parseFloat(anticipoManualeInput.value) || 0;
             const mode = tipoFinanziamentoInput.value;
-            let maxPercent = 1; // No limit for 'classico'
+            let maxPercent = 1; 
             if (mode === 'pvv') maxPercent = 0.35;
             if (mode === 'multimake') maxPercent = 0.30;
             
@@ -374,15 +348,6 @@
             }
             validateAnticipo();
         });
-        
-        document.querySelectorAll('input[name="tipo_vettura"]').forEach(radio => radio.addEventListener('change', updatePvvTanVisibility));
-        
-        tanOptionsContainer.addEventListener('change', (e) => {
-             if (e.target.matches('input[type="radio"]')) {
-                const selectedValue = e.target.value;
-                tanAlert.classList.toggle('hidden', selectedValue !== '7.99');
-            }
-        });
 
         document.querySelectorAll('input[name="tipo_motore"]').forEach(radio => {
             radio.addEventListener('change', (e) => {
@@ -419,8 +384,7 @@
         const resetFormAndUI = () => {
             form.reset();
             risultatiContainer.classList.add('hidden');
-            switchMode('pvv'); // Ritorna alla modalità di default
-            // Aggiorna manualmente i valori visualizzati degli slider e altri controlli
+            switchMode('pvv');
             durataPvvSlider.dispatchEvent(new Event('input'));
             durataClassicoSlider.dispatchEvent(new Event('input'));
             vfgSlider.dispatchEvent(new Event('input'));
@@ -449,8 +413,13 @@
 
             if (tipoFinanziamento === 'classico') {
                 durataMesi = parseInt(durataClassicoSlider.value);
-            } else {
+                tassoAnnuale = 10.99;
+            } else if (tipoFinanziamento === 'multimake') {
                 durataMesi = parseInt(durataPvvSlider.value);
+                tassoAnnuale = parseFloat(document.querySelector('input[name="tasso_multimake"]:checked').value);
+            } else { // pvv
+                durataMesi = parseInt(durataPvvSlider.value);
+                tassoAnnuale = 8.99;
             }
             
             let costoServizi = 0;
@@ -469,7 +438,7 @@
                 if (tipoMotore === 'diesel_benzina') {
                     const numTagliandi = document.querySelector('input[name="numero_tagliandi"]:checked').value;
                     costoServizi += (numTagliandi === '1' ? 5 : 13) * durataMesi;
-                } else { // up_metano_plugin
+                } else {
                     costoServizi += 13 * durataMesi;
                 }
             }
@@ -478,14 +447,6 @@
             const cashFlows = [importoTotaleFinanziato];
 
             if (tipoFinanziamento === 'pvv' || tipoFinanziamento === 'multimake') {
-                if (tipoFinanziamento === 'pvv') {
-                    const tipoVettura = document.querySelector('input[name="tipo_vettura"]:checked').value;
-                    const name = tipoVettura === 'nuovo' ? 'tasso_nuovo' : 'tasso_usato';
-                    tassoAnnuale = parseFloat(document.querySelector(`input[name="${name}"]:checked`).value);
-                } else {
-                    tassoAnnuale = 10.99;
-                }
-
                 vfgPercent = parseFloat(vfgSlider.value);
                 vfgEuro = prezzoVeicolo * (vfgPercent / 100);
                 numeroRate = durataMesi - 1;
@@ -500,7 +461,6 @@
                 cashFlows.push(-vfgEuro);
 
             } else { // Credito Classico
-                tassoAnnuale = 10.49;
                 numeroRate = durataMesi;
                 const tassoMensile = (tassoAnnuale / 100) / 12;
                 const P = importoTotaleFinanziato, r = tassoMensile, n = numeroRate;
@@ -510,7 +470,8 @@
             
             const monthlyIRR = calculateIRR(cashFlows);
             const taeg = monthlyIRR ? monthlyIRR * 12 : null;
-            const sogliaUsura = 0.17; 
+            // Valore arbitrario di warning, la soglia d'usura reale la stabilisce Bankitalia
+            const warningUsura = 0.165; 
 
             lastCalculationData = { tipoFinanziamento, nomeCliente, modelloVeicolo, prezzoVeicolo, anticipoEuro, rataMensile, numeroRate, vfgEuro, vfgPercent, durataMesi, tassoAnnuale, costoServizi, speseIstruttoria, importoTotaleFinanziato, taeg };
             
@@ -525,27 +486,28 @@
             document.getElementById('res-tan').textContent = `${tassoAnnuale.toFixed(2)}%`;
             document.getElementById('res-taeg').textContent = taeg ? `${(taeg * 100).toFixed(2)}%` : 'N/A';
             
-            if (taeg && taeg > sogliaUsura) {
+            if (taeg && taeg >= warningUsura) {
                 usuraAlert.classList.remove('hidden');
-                rataContainer.classList.add('hidden');
-                document.getElementById('res-maxi-rata-container').style.display = 'none';
             } else {
                 usuraAlert.classList.add('hidden');
-                rataContainer.classList.remove('hidden');
-                document.getElementById('res-rata-mensile').textContent = formatCurrency(rataMensile);
-                
-                if (tipoFinanziamento === 'pvv' || tipoFinanziamento === 'multimake') {
-                    document.getElementById('res-numero-rate').textContent = `per ${numeroRate} mesi`;
-                    document.getElementById('res-vfg').textContent = `${formatCurrency(vfgEuro)} (${vfgPercent}%)`;
-                    document.getElementById('res-maxi-rata').textContent = formatCurrency(vfgEuro);
-                    document.getElementById('res-vfg-container').style.display = 'flex';
-                    document.getElementById('res-maxi-rata-container').style.display = 'block';
-                } else {
-                    document.getElementById('res-numero-rate').textContent = `per ${numeroRate} mesi`;
-                    document.getElementById('res-vfg-container').style.display = 'none';
-                    document.getElementById('res-maxi-rata-container').style.display = 'none';
-                }
             }
+            
+            // Mostriamo sempre la rata, ma con l'alert sopra se necessario
+            rataContainer.classList.remove('hidden');
+            document.getElementById('res-rata-mensile').textContent = formatCurrency(rataMensile);
+            
+            if (tipoFinanziamento === 'pvv' || tipoFinanziamento === 'multimake') {
+                document.getElementById('res-numero-rate').textContent = `per ${numeroRate} mesi`;
+                document.getElementById('res-vfg').textContent = `${formatCurrency(vfgEuro)} (${vfgPercent}%)`;
+                document.getElementById('res-maxi-rata').textContent = formatCurrency(vfgEuro);
+                document.getElementById('res-vfg-container').style.display = 'flex';
+                document.getElementById('res-maxi-rata-container').style.display = 'block';
+            } else {
+                document.getElementById('res-numero-rate').textContent = `per ${numeroRate} mesi`;
+                document.getElementById('res-vfg-container').style.display = 'none';
+                document.getElementById('res-maxi-rata-container').style.display = 'none';
+            }
+            
             risultatiContainer.classList.remove('hidden');
         });
 
@@ -629,5 +591,7 @@
 
         switchMode('pvv');
     </script>
+</body>
+</html>
 </body>
 </html>
