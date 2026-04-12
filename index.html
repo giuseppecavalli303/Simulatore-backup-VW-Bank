@@ -11,8 +11,8 @@
                 extend: {
                     colors: {
                         vw: {
-                            base: '#001E50',   /* Deep Navy Blue VW */
-                            light: '#00B0F0',  /* Bright Cyan/Blue VW */
+                            base: '#001E50',   
+                            light: '#00B0F0',  
                             hover: '#00163b',
                             gray: '#F5F5F7',
                             border: '#E5E7EB'
@@ -31,28 +31,23 @@
     <style>
         body { font-family: 'Inter', sans-serif; background-color: #e5e7eb; }
         
-        /* Stile Custom per gli Slider (Range) */
         input[type=range] { -webkit-appearance: none; width: 100%; background: transparent; }
         input[type=range]:focus { outline: none; }
         input[type=range]::-webkit-slider-runnable-track { width: 100%; height: 4px; cursor: pointer; background: #cbd5e1; border-radius: 2px; }
         input[type=range]::-webkit-slider-thumb { -webkit-appearance: none; height: 24px; width: 24px; border-radius: 50%; background: #00B0F0; border: 4px solid #fff; box-shadow: 0 2px 4px rgba(0,0,0,0.2); cursor: pointer; margin-top: -10px; transition: transform 0.1s; }
         input[type=range]::-webkit-slider-thumb:hover { transform: scale(1.1); }
         
-        /* Stili Radio e Checkbox personalizzati */
         input[type="radio"]:checked, input[type="checkbox"]:checked { accent-color: #00B0F0; }
         
-        /* Tabs */
         .tab-button { transition: all 0.2s ease-in-out; border-bottom: 3px solid transparent; color: #4b5563; }
         .tab-button.active { border-bottom: 3px solid #00B0F0; color: #001E50; font-weight: 700; background: transparent; }
         .tab-button:hover:not(.active) { color: #001E50; }
 
-        /* Input Fields */
         .form-input { transition: border-color 0.2s, box-shadow 0.2s; }
         .form-input:focus { border-color: #00B0F0; box-shadow: 0 0 0 2px rgba(0, 176, 240, 0.2); outline: none; }
 
         .error-message { color: #ef4444; font-size: 0.75rem; display: none; font-weight: 500; margin-top: 4px; }
         
-        /* Custom Scrollbar */
         ::-webkit-scrollbar { width: 6px; }
         ::-webkit-scrollbar-track { background: transparent; }
         ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 3px; }
@@ -117,12 +112,12 @@
                             <label for="durata_pvv" class="block text-xs font-bold text-gray-500 uppercase tracking-wider">Durata Finanziamento</label>
                             <span id="durata-pvv-value" class="font-bold text-vw-light text-lg">36 mesi</span>
                         </div>
-                        <input type="range" id="durata_pvv" min="24" max="36" value="36" step="12" class="w-full">
-                        <div id="durata-pvv-labels" class="flex justify-between text-xs text-gray-400 mt-1 font-medium"><span>24</span><span>36</span></div>
+                        <input type="range" id="durata_pvv" min="24" max="48" value="36" step="12" class="w-full">
+                        <div id="durata-pvv-labels" class="flex justify-between text-xs text-gray-400 mt-1 font-medium"><span>24</span><span>36</span><span>48</span></div>
                     </div>
                     <div>
                         <div class="flex justify-between items-end mb-2">
-                            <label for="vfg" class="block text-xs font-bold text-gray-500 uppercase tracking-wider">Valore Futuro Garantito</label>
+                            <label for="vfg" class="block text-xs font-bold text-gray-500 uppercase tracking-wider">Valore Futuro Garantito (Su Prezzo Vendita)</label>
                             <span id="vfg-value" class="font-bold text-vw-light text-lg">45%</span>
                         </div>
                         <input type="range" id="vfg" min="30" max="75" value="45" class="w-full">
@@ -132,7 +127,6 @@
                 <div id="tan-options-container" class="border-t border-gray-200 pt-6">
                     <span class="block text-xs font-bold text-gray-500 uppercase tracking-wider mb-3">Tasso di Interesse (TAN)</span>
                     
-                    <!-- Tasso per PVV -->
                     <div id="tan-pvv-display" class="hidden">
                         <div class="bg-vw-gray border border-gray-200 rounded-md p-3 flex justify-between items-center">
                             <span class="text-vw-base font-bold">8,99%</span>
@@ -140,14 +134,13 @@
                         </div>
                     </div>
                     
-                    <!-- Tassi per Multimake -->
                     <div id="tan-multimake-options" class="hidden flex-col gap-3">
                         <label class="cursor-pointer">
                             <div class="flex items-center p-3 border border-gray-200 rounded-md hover:bg-gray-50 transition-colors">
                                 <input type="radio" name="tasso_multimake" value="11.49" class="w-4 h-4 text-vw-light" checked>
                                 <div class="ml-3 flex-1 flex justify-between items-center">
                                     <span class="text-sm font-semibold text-vw-base">11,49% <span class="font-normal text-gray-500">- Standard</span></span>
-                                    <span class="text-[10px] text-gray-400 font-medium uppercase tracking-wider">Max 10 anni | BD 90</span>
+                                    <span class="text-[10px] text-gray-400 font-medium uppercase tracking-wider">MMPCP24 | BD 90</span>
                                 </div>
                             </div>
                         </label>
@@ -156,13 +149,12 @@
                                 <input type="radio" name="tasso_multimake" value="9.99" class="w-4 h-4 text-vw-light">
                                 <div class="ml-3 flex-1 flex justify-between items-center">
                                     <span class="text-sm font-semibold text-vw-base">9,99% <span class="font-normal text-gray-500">- VTI / Tedesche</span></span>
-                                    <span class="text-[10px] text-gray-400 font-medium uppercase tracking-wider">Cl. 30 e 34 | BD 90</span>
+                                    <span class="text-[10px] text-gray-400 font-medium uppercase tracking-wider">MMPCP25 | BD 90</span>
                                 </div>
                             </div>
                         </label>
                     </div>
                     
-                    <!-- Tasso per Classico -->
                     <div id="tan-classico-display" class="hidden">
                          <div class="bg-vw-gray border border-gray-200 rounded-md p-3 flex justify-between items-center">
                             <span class="text-vw-base font-bold">10,99%</span>
@@ -182,39 +174,47 @@
                     </div>
                 </div>
                 
-                <!-- Manutenzione (solo PVV) -->
+                <!-- Manutenzione (solo PVV/Multimake) -->
                 <div id="manutenzione-container" class="hidden border border-gray-200 p-5 rounded-lg">
-                    <p class="text-xs font-bold text-vw-base uppercase tracking-wider mb-4">Piani di Manutenzione</p>
+                    <p class="text-xs font-bold text-vw-base uppercase tracking-wider mb-4">Piano Manutenzione (Servizio Finanziato)</p>
                     <div class="space-y-4">
-                        <div>
-                            <label class="flex items-start cursor-pointer">
-                                <input type="radio" name="tipo_motore" value="diesel_benzina" class="mt-1 h-4 w-4 text-vw-light" required checked>
-                                <span class="ml-3 text-sm font-medium text-vw-base">Motori Termici (Diesel/Benzina)</span>
-                            </label>
-                            <div id="tagliandi-options" class="ml-7 mt-3 flex gap-4">
-                                <label class="flex items-center p-2 border border-gray-200 rounded bg-gray-50 flex-1 cursor-pointer hover:border-vw-light">
-                                    <input type="radio" name="numero_tagliandi" value="1" class="h-3 w-3 text-vw-light" checked>
-                                    <span class="ml-2 text-xs font-medium text-gray-700">1 Tagliando <br><span class="text-gray-400">5€/mese</span></span>
-                                </label>
-                                <label class="flex items-center p-2 border border-gray-200 rounded bg-gray-50 flex-1 cursor-pointer hover:border-vw-light">
-                                    <input type="radio" name="numero_tagliandi" value="2" class="h-3 w-3 text-vw-light">
-                                    <span class="ml-2 text-xs font-medium text-gray-700">2 Tagliandi <br><span class="text-gray-400">13€/mese</span></span>
-                                </label>
-                            </div>
-                        </div>
-                        <label class="flex items-start cursor-pointer border-t border-gray-100 pt-3">
-                            <input type="radio" name="tipo_motore" value="up_metano_plugin" class="mt-1 h-4 w-4 text-vw-light" required>
-                            <div class="ml-3">
-                                <span class="block text-sm font-medium text-vw-base">Vetture a Metano, Plug-in o UP!</span>
-                                <span class="block text-xs text-gray-500 mt-0.5">Include 2 Tagliandi (13€/mese)</span>
-                            </div>
+                        <label class="flex items-center cursor-pointer">
+                            <input type="checkbox" id="servizio_manutenzione" class="h-4 w-4 text-vw-light rounded" checked>
+                            <span class="ml-3 text-sm font-semibold text-vw-base">Includi WeCare Easy</span>
                         </label>
+                        <div id="opzioni-motore" class="ml-7 space-y-3">
+                            <div>
+                                <label class="flex items-start cursor-pointer">
+                                    <input type="radio" name="tipo_motore" value="diesel_benzina" class="mt-1 h-4 w-4 text-vw-light" required checked>
+                                    <span class="ml-3 text-sm font-medium text-vw-base">Motori Termici (Diesel/Benzina)</span>
+                                </label>
+                                <div id="tagliandi-options" class="ml-7 mt-3 flex gap-4">
+                                    <label class="flex items-center p-2 border border-gray-200 rounded bg-gray-50 flex-1 cursor-pointer hover:border-vw-light">
+                                        <input type="radio" name="numero_tagliandi" value="1" class="h-3 w-3 text-vw-light" checked>
+                                        <span class="ml-2 text-xs font-medium text-gray-700">1 Tagliando <br><span class="text-gray-400">5€/mese</span></span>
+                                    </label>
+                                    <label class="flex items-center p-2 border border-gray-200 rounded bg-gray-50 flex-1 cursor-pointer hover:border-vw-light">
+                                        <input type="radio" name="numero_tagliandi" value="2" class="h-3 w-3 text-vw-light">
+                                        <span class="ml-2 text-xs font-medium text-gray-700">2 Tagliandi <br><span class="text-gray-400">13€/mese</span></span>
+                                    </label>
+                                </div>
+                            </div>
+                            <label class="flex items-start cursor-pointer border-t border-gray-100 pt-3">
+                                <input type="radio" name="tipo_motore" value="up_metano_plugin" class="mt-1 h-4 w-4 text-vw-light" required>
+                                <div class="ml-3">
+                                    <span class="block text-sm font-medium text-vw-base">Metano, Plug-in o UP!</span>
+                                    <span class="block text-xs text-gray-500 mt-0.5">Include 2 Tagliandi (13€/mese)</span>
+                                </div>
+                            </label>
+                        </div>
                     </div>
                 </div>
 
                 <div class="border border-gray-200 p-5 rounded-lg">
                     <p class="text-xs font-bold text-vw-base uppercase tracking-wider mb-4">Servizi Assicurativi</p>
-                    <div class="space-y-3">
+                    
+                    <p class="text-[10px] font-bold text-gray-400 uppercase mb-2">Servizi Finanziati (Generano Interessi)</p>
+                    <div class="space-y-3 mb-6">
                          <div class="border-b border-gray-100 pb-3">
                              <label class="flex items-center cursor-pointer">
                                  <input type="checkbox" id="servizio_furto" class="h-4 w-4 text-vw-light rounded">
@@ -227,17 +227,22 @@
                                 </div>
                                 <div class="flex items-center justify-between">
                                     <label for="servizi-durata" class="text-xs font-medium text-gray-500">Copertura:</label>
-                                    <select id="servizi-durata" class="form-input text-xs border-gray-300 rounded py-1 px-2 font-medium text-vw-base"><option value="12">1 Anno</option><option value="24">2 Anni</option><option value="36" selected>3 Anni</option><option value="48">4 Anni</option></select>
+                                    <!-- Durata sincronizzata via JS -->
+                                    <select id="servizi-durata" class="form-input text-xs border-gray-300 rounded py-1 px-2 font-medium text-vw-base"><option value="24">2 Anni</option><option value="36" selected>3 Anni</option><option value="48">4 Anni</option></select>
                                 </div>
                              </div>
                          </div>
                          <label class="flex items-center cursor-pointer py-1">
                              <input type="checkbox" id="servizio_gap" class="h-4 w-4 text-vw-light rounded">
-                             <span class="ml-3 text-sm font-medium text-gray-700">Garanzia GAP</span>
+                             <span class="ml-3 text-sm font-medium text-gray-700">Garanzia GAP (Valore a Nuovo)</span>
                          </label>
+                    </div>
+
+                    <p class="text-[10px] font-bold text-gray-400 uppercase mb-2">Servizi Ripartiti (Senza Interessi)</p>
+                    <div class="space-y-3">
                          <label class="flex items-center cursor-pointer py-1">
                              <input type="checkbox" id="servizio_alter_ego" class="h-4 w-4 text-vw-light rounded">
-                             <span class="ml-3 text-sm font-medium text-gray-700">Protezione Alter Ego</span>
+                             <span class="ml-3 text-sm font-medium text-gray-700">CPI Alter Ego (Protezione Credito)</span>
                          </label>
                          <label class="flex items-center cursor-pointer py-1">
                              <input type="checkbox" id="servizio_personal_safe" class="h-4 w-4 text-vw-light rounded">
@@ -253,7 +258,7 @@
             </form>
         </div>
 
-        <!-- Colonna Destra: Risultati (Tema Scuro "Premium") -->
+        <!-- Colonna Destra: Risultati (Tema Scuro) -->
         <div id="risultati-container" class="md:w-5/12 p-8 md:p-10 bg-vw-base text-white hidden flex-col justify-between" style="max-height: 90vh; overflow-y: auto;">
             <div id="risultati-stampa" class="w-full">
                 
@@ -261,53 +266,47 @@
                     <p class="text-vw-light text-xs font-bold uppercase tracking-widest mb-1">Preventivo Personalizzato per</p>
                     <h2 id="res-nome-cliente" class="text-2xl font-bold text-white tracking-wide"></h2>
                 </div>
-
-                <div id="usura-alert" class="hidden mb-6 p-4 bg-red-900/50 border border-red-500 rounded-md">
-                    <p class="text-red-400 text-xs font-bold uppercase tracking-wider mb-1 flex items-center">
-                        <svg class="w-4 h-4 mr-1" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clip-rule="evenodd"></path></svg>
-                        Soglia Usura Rischio
-                    </p>
-                    <p class="text-xs text-red-200">Il TAEG stimato potrebbe superare le soglie Bankitalia. Consigliato controllo sul sistema ufficiale.</p>
-                </div>
                 
                 <!-- Hero Box: Rata -->
                 <div id="rata-container" class="bg-gradient-to-br from-[#00163b] to-vw-base p-6 rounded-xl border border-gray-700 shadow-2xl text-center mb-8 relative overflow-hidden">
                     <div class="absolute top-0 left-0 w-full h-1 bg-vw-light"></div>
-                    <p class="text-gray-400 text-sm font-medium mb-1 uppercase tracking-wider">La tua rata mensile</p>
+                    <p class="text-gray-400 text-sm font-medium mb-1 uppercase tracking-wider">Costo di Guida Mensile</p>
                     <p id="res-rata-mensile" class="text-5xl font-bold text-white tracking-tighter my-2 drop-shadow-md"></p>
                     <p id="res-numero-rate" class="text-vw-light text-sm font-semibold"></p>
                 </div>
 
                 <!-- Dati Finanziari -->
                 <div class="space-y-3 text-sm text-gray-300">
-                    <div class="flex justify-between items-center py-1"><span class="font-medium text-gray-400">Veicolo</span><span id="res-prezzo" class="font-semibold text-white"></span></div>
+                    <div class="flex justify-between items-center py-1"><span class="font-medium text-gray-400">Prezzo Vettura</span><span id="res-prezzo" class="font-semibold text-white"></span></div>
                     <div class="flex justify-between items-center py-1"><span class="font-medium text-gray-400">Anticipo</span><span id="res-anticipo" class="font-semibold text-white"></span></div>
-                    <div class="w-full h-px bg-gray-700 my-2"></div>
-                    <div class="flex justify-between items-center py-1"><span class="font-medium text-gray-400">Istruttoria Pratica</span><span id="res-spese-istruttoria" class="font-semibold text-white"></span></div>
-                    <div class="flex justify-between items-center py-1"><span class="font-medium text-gray-400">Servizi e Assicurazioni</span><span id="res-costo-servizi" class="font-semibold text-white"></span></div>
-                    <div class="flex justify-between items-center py-2 bg-white/5 px-3 rounded"><span class="font-bold text-gray-200 uppercase text-xs tracking-wider">Tot. Finanziato</span><span id="res-importo-finanziato" class="font-bold text-vw-light"></span></div>
-                    <div class="w-full h-px bg-gray-700 my-2"></div>
+                    <div class="w-full h-px bg-gray-700 my-1"></div>
                     
-                    <div class="grid grid-cols-3 gap-2 mt-4">
+                    <div class="flex justify-between items-center py-1"><span class="font-medium text-gray-400 text-xs">Spese Istruttoria Pratica</span><span id="res-spese-istruttoria" class="font-semibold text-white text-xs"></span></div>
+                    <div class="flex justify-between items-center py-1"><span class="font-medium text-gray-400 text-xs">Servizi Finanziati (Furto, Gap, ecc.)</span><span id="res-servizi-finanziati" class="font-semibold text-white text-xs"></span></div>
+                    
+                    <div class="flex justify-between items-center py-2 bg-white/5 px-3 rounded mt-2"><span class="font-bold text-gray-200 uppercase text-xs tracking-wider">Totale Credito Finanziato</span><span id="res-importo-finanziato" class="font-bold text-vw-light"></span></div>
+                    
+                    <div class="w-full h-px bg-gray-700 my-2"></div>
+                    <div class="flex justify-between items-center py-1"><span class="font-medium text-gray-400 text-xs">Servizi Ripartiti in Rata (es. CPI)</span><span id="res-servizi-ripartiti" class="font-semibold text-white text-xs"></span></div>
+                    <div class="flex justify-between items-center py-1"><span class="font-medium text-gray-400 text-xs">Imposta di Bollo Sostitutiva (1° rata)</span><span id="res-bollo" class="font-semibold text-white text-xs"></span></div>
+                    <div class="flex justify-between items-center py-1"><span class="font-medium text-gray-400 text-xs">Spese Incasso Rata (Mensili)</span><span class="font-semibold text-white text-xs">€ 3,40</span></div>
+
+                    <div class="grid grid-cols-2 gap-2 mt-5">
                         <div class="bg-[#00163b] p-3 rounded text-center border border-gray-700">
                             <span class="block text-[10px] uppercase tracking-wider text-gray-500 mb-1">Durata</span>
-                            <span id="res-durata" class="font-bold text-white"></span>
+                            <span id="res-durata" class="font-bold text-white text-sm"></span>
                         </div>
                         <div class="bg-[#00163b] p-3 rounded text-center border border-gray-700">
                             <span class="block text-[10px] uppercase tracking-wider text-gray-500 mb-1">TAN fissa</span>
-                            <span id="res-tan" class="font-bold text-white"></span>
-                        </div>
-                        <div class="bg-[#00163b] p-3 rounded text-center border border-gray-700">
-                            <span class="block text-[10px] uppercase tracking-wider text-vw-light mb-1">TAEG stimato</span>
-                            <span id="res-taeg" class="font-bold text-vw-light"></span>
+                            <span id="res-tan" class="font-bold text-white text-sm"></span>
                         </div>
                     </div>
                 </div>
 
                 <div id="res-maxi-rata-container" class="mt-8 p-5 bg-[#00163b] border border-gray-700 rounded-lg text-center">
-                    <p class="text-xs text-gray-400 uppercase tracking-widest font-semibold mb-1">Valore Futuro Garantito</p>
+                    <p class="text-xs text-gray-400 uppercase tracking-widest font-semibold mb-1">Maxirata (VFG)</p>
                     <p id="res-maxi-rata" class="text-2xl font-bold text-white"></p>
-                    <p id="res-vfg" class="text-xs text-gray-500 mt-1"></p>
+                    <p id="res-vfg" class="text-[10px] text-gray-500 mt-1 uppercase tracking-wider"></p>
                 </div>
                 
             </div>
@@ -351,12 +350,16 @@
         const servizioGapCheckbox = document.getElementById('servizio_gap');
         const servizioAlterEgoCheckbox = document.getElementById('servizio_alter_ego');
         const servizioPersonalSafeCheckbox = document.getElementById('servizio_personal_safe');
+        
         const manutenzioneContainer = document.getElementById('manutenzione-container');
+        const servizioManutenzioneCb = document.getElementById('servizio_manutenzione');
+        const opzioniMotoreDiv = document.getElementById('opzioni-motore');
         const tagliandiOptions = document.getElementById('tagliandi-options');
+        const serviziDurataSelect = document.getElementById('servizi-durata');
+
         const risultatiContainer = document.getElementById('risultati-container');
         const printButton = document.getElementById('print-button');
         const newSimButton = document.getElementById('new-sim-button');
-        const usuraAlert = document.getElementById('usura-alert');
         const rataContainer = document.getElementById('rata-container');
         const controlsColumn = document.getElementById('controls-column');
         
@@ -371,6 +374,12 @@
                 anticipoPercentSelect.appendChild(option);
             }
         };
+
+        const syncDurataServizi = () => {
+            const mesi = parseInt(durataPvvSlider.value);
+            serviziDurataSelect.value = mesi;
+        };
+        durataPvvSlider.addEventListener('change', syncDurataServizi);
 
         const switchMode = (mode) => {
             tipoFinanziamentoInput.value = mode;
@@ -389,15 +398,15 @@
                 optionsPvvCommon.style.display = 'block';
                 anticipoPercentSelect.style.display = 'block';
                 anticipoManualeInput.parentElement.classList.replace('w-full', 'w-2/3');
+                manutenzioneContainer.style.display = 'block';
                 
                 if (mode === 'pvv') {
                     btnPvv.classList.add('active', 'border-vw-light');
                     populateAnticipoSelect(35);
                     anticipoError.textContent = "Max 35% di anticipo consentito.";
                     tanPvvDisplay.style.display = 'block';
-                    manutenzioneContainer.style.display = 'block';
-                    durataPvvSlider.max = 36;
-                    durataPvvLabels.innerHTML = '<span>24</span><span>36</span>';
+                    durataPvvSlider.max = 48; // Aggiunto 48 anche per PVV come flessibilità
+                    durataPvvLabels.innerHTML = '<span>24</span><span>36</span><span>48</span>';
                 } else { 
                     btnMultimake.classList.add('active', 'border-vw-light');
                     populateAnticipoSelect(30);
@@ -410,6 +419,7 @@
                     durataPvvSlider.value = durataPvvSlider.max;
                 }
                 durataPvvSlider.dispatchEvent(new Event('input'));
+                syncDurataServizi();
 
             } else { 
                 btnClassico.classList.add('active', 'border-vw-light');
@@ -473,6 +483,11 @@
             validateAnticipo();
         });
 
+        servizioManutenzioneCb.addEventListener('change', (e) => {
+            opzioniMotoreDiv.style.opacity = e.target.checked ? '1' : '0.5';
+            opzioniMotoreDiv.style.pointerEvents = e.target.checked ? 'auto' : 'none';
+        });
+
         document.querySelectorAll('input[name="tipo_motore"]').forEach(radio => {
             radio.addEventListener('change', (e) => {
                 tagliandiOptions.style.display = e.target.value === 'diesel_benzina' ? 'flex' : 'none';
@@ -484,6 +499,7 @@
         vfgSlider.addEventListener('input', (e) => { vfgValueSpan.textContent = `${e.target.value}%`; });
         servizioFurtoCheckbox.addEventListener('change', (e) => { furtoOptionsDiv.classList.toggle('hidden', !e.target.checked); });
         
+        // Calcolo preciso del TAEG tramite Internal Rate of Return
         function calculateIRR(cashFlows, guess = 0.01) {
             const maxIterations = 1000;
             const precision = 1e-7;
@@ -502,7 +518,7 @@
                 if (Math.abs(newRate - rate) < precision) return newRate;
                 rate = newRate;
             }
-            return null;
+            return rate;
         }
 
         const resetFormAndUI = () => {
@@ -514,6 +530,7 @@
             durataPvvSlider.dispatchEvent(new Event('input'));
             durataClassicoSlider.dispatchEvent(new Event('input'));
             vfgSlider.dispatchEvent(new Event('input'));
+            servizioManutenzioneCb.dispatchEvent(new Event('change'));
         };
 
         newSimButton.addEventListener('click', resetFormAndUI);
@@ -534,108 +551,162 @@
                 return;
             }
             const anticipoEuro = parseFloat(anticipoManualeInput.value) || 0;
-            const speseIstruttoria = 360;
-            let rataMensile, numeroRate, durataMesi, vfgEuro = 0, vfgPercent = 0, tassoAnnuale;
+            
+            // Istruttoria fissa per VW Bank
+            const speseIstruttoria = 380;
+            // Incasso Rata SEPA mensile
+            const speseIncasso = 3.40;
+            
+            let durataMesiTotali, tassoAnnuale, vfgEuro = 0, vfgPercent = 0;
 
             if (tipoFinanziamento === 'classico') {
-                durataMesi = parseInt(durataClassicoSlider.value);
+                durataMesiTotali = parseInt(durataClassicoSlider.value);
                 tassoAnnuale = 10.99;
             } else if (tipoFinanziamento === 'multimake') {
-                durataMesi = parseInt(durataPvvSlider.value);
+                durataMesiTotali = parseInt(durataPvvSlider.value);
                 tassoAnnuale = parseFloat(document.querySelector('input[name="tasso_multimake"]:checked').value);
             } else { 
-                durataMesi = parseInt(durataPvvSlider.value);
+                durataMesiTotali = parseInt(durataPvvSlider.value);
                 tassoAnnuale = 8.99;
             }
+
+            let costoServiziFinanziati = 0; // Generano interessi
+            let costoServiziRipartiti = 0;  // Spalmati sulla rata, no interessi
             
-            let costoServizi = 0;
+            // 1. SERVIZI FINANZIATI
             if (servizioFurtoCheckbox.checked) {
                 const pacchettoFurto = document.querySelector('input[name="furto_pacchetto"]:checked').value;
                 const durataServiziMesi = parseInt(document.getElementById('servizi-durata').value);
                 const costoAnnuoPerMille = (pacchettoFurto === 'first_trip') ? 11 : 18;
-                costoServizi += (prezzoVeicolo / 1000) * costoAnnuoPerMille * (durataServiziMesi / 12);
+                costoServiziFinanziati += (prezzoVeicolo / 1000) * costoAnnuoPerMille * (durataServiziMesi / 12);
             }
-            if (servizioGapCheckbox.checked) { costoServizi += 19 * durataMesi; }
-            if (servizioAlterEgoCheckbox.checked) { costoServizi += 18 * durataMesi; }
-            if (servizioPersonalSafeCheckbox.checked) { costoServizi += 16 * durataMesi; }
-
-            if (tipoFinanziamento === 'pvv') {
+            if (servizioGapCheckbox.checked) { costoServiziFinanziati += 19 * durataMesiTotali; }
+            
+            if (['pvv', 'multimake'].includes(tipoFinanziamento) && servizioManutenzioneCb.checked) {
                 const tipoMotore = document.querySelector('input[name="tipo_motore"]:checked').value;
                 if (tipoMotore === 'diesel_benzina') {
                     const numTagliandi = document.querySelector('input[name="numero_tagliandi"]:checked').value;
-                    costoServizi += (numTagliandi === '1' ? 5 : 13) * durataMesi;
+                    costoServiziFinanziati += (numTagliandi === '1' ? 5 : 13) * durataMesiTotali;
                 } else {
-                    costoServizi += 13 * durataMesi;
+                    costoServiziFinanziati += 13 * durataMesiTotali;
                 }
             }
 
-            const importoTotaleFinanziato = (prezzoVeicolo - anticipoEuro) + speseIstruttoria + costoServizi;
-            const cashFlows = [importoTotaleFinanziato];
+            // 2. SERVIZI RIPARTITI (CPI)
+            if (servizioAlterEgoCheckbox.checked) { costoServiziRipartiti += 18 * durataMesiTotali; }
+            if (servizioPersonalSafeCheckbox.checked) { costoServiziRipartiti += 16 * durataMesiTotali; }
+
+            // Calcolo del Capitale Effettivo Finanziato (Base per calcolo rate)
+            const importoTotaleFinanziato = (prezzoVeicolo - anticipoEuro) + speseIstruttoria + costoServiziFinanziati;
+            
+            // Imposta di bollo sostitutiva 0.25% calcolata sul finanziato
+            const impostaBollo = importoTotaleFinanziato * 0.0025;
+
+            let rataFinanziaria = 0;
+            let rataServiziRipartiti = 0;
+            let rataMensileTotale = 0;
+            let numeroRateNormali = 0;
+            let taeg = null;
+            const cashFlows = [];
+
+            const tassoMensile = (tassoAnnuale / 100) / 12;
 
             if (tipoFinanziamento === 'pvv' || tipoFinanziamento === 'multimake') {
                 vfgPercent = parseFloat(vfgSlider.value);
                 vfgEuro = prezzoVeicolo * (vfgPercent / 100);
-                numeroRate = durataMesi - 1;
-                const tassoMensile = (tassoAnnuale / 100) / 12;
-                const P = importoTotaleFinanziato, FV = vfgEuro, r = tassoMensile, n = numeroRate;
-                const fattoreAttualizzazioneFV = FV / Math.pow(1 + r, n);
-                const capitaleDaAmortizzare = P - fattoreAttualizzazioneFV;
-                const fattoreAnnuita = (r * Math.pow(1 + r, n)) / (Math.pow(1 + r, n) - 1);
-                rataMensile = capitaleDaAmortizzare * fattoreAnnuita;
+                numeroRateNormali = durataMesiTotali - 1; // Le rate normali sono N-1
+
+                // Attualizziamo il VFG al momento 0
+                const pv_VFG = vfgEuro / Math.pow(1 + tassoMensile, durataMesiTotali);
+                const capitaleDaAmmortizzareConRate = importoTotaleFinanziato - pv_VFG;
                 
-                for(let i=0; i<numeroRate; i++) cashFlows.push(-rataMensile);
-                cashFlows.push(-vfgEuro);
+                const fattoreAnnuita = (tassoMensile * Math.pow(1 + tassoMensile, numeroRateNormali)) / (Math.pow(1 + tassoMensile, numeroRateNormali) - 1);
+                
+                rataFinanziaria = capitaleDaAmmortizzareConRate * fattoreAnnuita;
+                rataServiziRipartiti = costoServiziRipartiti / numeroRateNormali;
+                rataMensileTotale = rataFinanziaria + rataServiziRipartiti;
+
+                // COSTRUZIONE CASHFLOWS PER TAEG
+                // CF0: Il cliente "riceve" o "beneficia" del prezzo - anticipo + servizi scelti (finanziati e ripartiti)
+                // L'istruttoria è un costo, quindi NON fa parte dell'erogato netto ai fini TAEG
+                const cf0 = (prezzoVeicolo - anticipoEuro) + costoServiziFinanziati + costoServiziRipartiti;
+                cashFlows.push(cf0);
+
+                for (let i = 1; i <= durataMesiTotali; i++) {
+                    let out = 0;
+                    if (i <= numeroRateNormali) {
+                        out += rataMensileTotale;
+                    }
+                    if (i === durataMesiTotali) {
+                        out += vfgEuro; // Maxirata pagata all'ultima scadenza
+                    }
+                    out += speseIncasso; // 3.40 ad ogni incasso (sia rata che maxirata)
+                    
+                    if (i === 1) {
+                        out += impostaBollo; // Bollo pagato con la prima rata
+                    }
+                    cashFlows.push(-out);
+                }
 
             } else { 
-                numeroRate = durataMesi;
-                const tassoMensile = (tassoAnnuale / 100) / 12;
-                const P = importoTotaleFinanziato, r = tassoMensile, n = numeroRate;
-                rataMensile = P * (r * Math.pow(1 + r, n)) / (Math.pow(1 + r, n) - 1);
-                for(let i=0; i<numeroRate; i++) cashFlows.push(-rataMensile);
+                // Credito Classico
+                numeroRateNormali = durataMesiTotali;
+                rataFinanziaria = importoTotaleFinanziato * (tassoMensile * Math.pow(1 + tassoMensile, numeroRateNormali)) / (Math.pow(1 + tassoMensile, numeroRateNormali) - 1);
+                rataServiziRipartiti = costoServiziRipartiti / numeroRateNormali;
+                rataMensileTotale = rataFinanziaria + rataServiziRipartiti;
+
+                const cf0 = (prezzoVeicolo - anticipoEuro) + costoServiziFinanziati + costoServiziRipartiti;
+                cashFlows.push(cf0);
+
+                for (let i = 1; i <= numeroRateNormali; i++) {
+                    let out = rataMensileTotale + speseIncasso;
+                    if (i === 1) out += impostaBollo;
+                    cashFlows.push(-out);
+                }
             }
             
             const monthlyIRR = calculateIRR(cashFlows);
-            const taeg = monthlyIRR ? monthlyIRR * 12 : null;
-            const warningUsura = 0.165; 
+            // TAEG capitalizzato annualmente
+            taeg = monthlyIRR ? (Math.pow(1 + monthlyIRR, 12) - 1) : null;
 
-            lastCalculationData = { tipoFinanziamento, nomeCliente, modelloVeicolo, prezzoVeicolo, anticipoEuro, rataMensile, numeroRate, vfgEuro, vfgPercent, durataMesi, tassoAnnuale, costoServizi, speseIstruttoria, importoTotaleFinanziato, taeg };
+            lastCalculationData = { 
+                tipoFinanziamento, nomeCliente, modelloVeicolo, prezzoVeicolo, anticipoEuro, 
+                rataMensile: rataMensileTotale, numeroRateNormali, vfgEuro, vfgPercent, durataMesiTotali, 
+                tassoAnnuale, costoServiziFinanziati, costoServiziRipartiti, speseIstruttoria, 
+                importoTotaleFinanziato, taeg, impostaBollo, speseIncasso
+            };
             
+            // UPDATE UI
             document.getElementById('res-nome-cliente').textContent = nomeCliente;
             document.getElementById('res-prezzo').textContent = formatCurrency(prezzoVeicolo);
-            const anticipoPercentualeCalcolato = prezzoVeicolo > 0 ? (anticipoEuro / prezzoVeicolo * 100).toFixed(2) : 0;
-            document.getElementById('res-anticipo').textContent = `${formatCurrency(anticipoEuro)} (${anticipoPercentualeCalcolato}%)`;
+            document.getElementById('res-anticipo').textContent = formatCurrency(anticipoEuro);
+            
             document.getElementById('res-spese-istruttoria').textContent = formatCurrency(speseIstruttoria);
-            document.getElementById('res-costo-servizi').textContent = formatCurrency(costoServizi);
+            document.getElementById('res-servizi-finanziati').textContent = formatCurrency(costoServiziFinanziati);
+            document.getElementById('res-servizi-ripartiti').textContent = formatCurrency(costoServiziRipartiti);
+            document.getElementById('res-bollo').textContent = formatCurrency(impostaBollo);
+            
             document.getElementById('res-importo-finanziato').textContent = formatCurrency(importoTotaleFinanziato);
-            document.getElementById('res-durata').textContent = `${durataMesi} mesi`;
+            
+            document.getElementById('res-durata').textContent = `${durataMesiTotali} mesi`;
             document.getElementById('res-tan').textContent = `${tassoAnnuale.toFixed(2)}%`;
-            document.getElementById('res-taeg').textContent = taeg ? `${(taeg * 100).toFixed(2)}%` : 'N/A';
             
-            if (taeg && taeg >= warningUsura) {
-                usuraAlert.classList.remove('hidden');
-            } else {
-                usuraAlert.classList.add('hidden');
-            }
-            
-            rataContainer.classList.remove('hidden');
-            document.getElementById('res-rata-mensile').textContent = formatCurrency(rataMensile);
+            document.getElementById('res-rata-mensile').textContent = formatCurrency(rataMensileTotale);
             
             if (tipoFinanziamento === 'pvv' || tipoFinanziamento === 'multimake') {
-                document.getElementById('res-numero-rate').textContent = `X ${numeroRate} MESI`;
-                document.getElementById('res-vfg').textContent = `Pari al ${vfgPercent}% del valore vettura`;
+                document.getElementById('res-numero-rate').textContent = `X ${numeroRateNormali} MESI`;
+                document.getElementById('res-vfg').textContent = `Pari al ${vfgPercent}% del valore vettura - Scadenza al ${durataMesiTotali}° Mese`;
                 document.getElementById('res-maxi-rata').textContent = formatCurrency(vfgEuro);
                 document.getElementById('res-maxi-rata-container').style.display = 'block';
             } else {
-                document.getElementById('res-numero-rate').textContent = `X ${numeroRate} MESI`;
+                document.getElementById('res-numero-rate').textContent = `X ${numeroRateNormali} MESI`;
                 document.getElementById('res-maxi-rata-container').style.display = 'none';
             }
             
-            // Adatta il layout: rimpicciolisce la form a sinistra e mostra i risultati a destra
             controlsColumn.classList.replace('md:w-full', 'md:w-7/12');
             risultatiContainer.classList.remove('hidden');
             risultatiContainer.classList.add('flex');
             
-            // Su mobile scrolla in basso ai risultati
             if(window.innerWidth < 768) {
                 risultatiContainer.scrollIntoView({ behavior: 'smooth' });
             }
@@ -644,18 +715,14 @@
         const generatePrintContent = (data) => {
             const printTitle = data.tipoFinanziamento === 'pvv' ? 'PROGETTO VALORE VOLKSWAGEN' : 'FINANZIAMENTO MULTIMAKE';
             const printModel = `VOLKSWAGEN ${data.modelloVeicolo}`;
-            const printAnticipo = formatCurrency(data.anticipoEuro);
-            const printRata = formatCurrency(data.rataMensile);
-            const printNumRate = data.numeroRate;
-            const printVfg = formatCurrency(data.vfgEuro);
             
             let vfgSection = '';
             if (data.tipoFinanziamento === 'pvv' || data.tipoFinanziamento === 'multimake') {
                 vfgSection = `
                     <div style="margin: 40px 0; padding: 20px; border-left: 4px solid #00B0F0; background: #f9fafb; text-align: left;">
-                        <p style="color: #6b7280; font-size: 14px; text-transform: uppercase; letter-spacing: 1px; font-weight: bold; margin-bottom: 8px;">Valore Futuro Garantito</p>
-                        <p style="font-size: 28px; font-weight: bold; color: #001E50; margin: 0;">${printVfg}</p>
-                        <p style="color: #4b5563; font-size: 14px; margin-top: 12px; line-height: 1.5;">Al termine del contratto potrai SOSTITUIRE la vettura con un'altra e provvederemo noi al saldo. Altrimenti potrai scegliere di restituire la vettura o tenerla procedendo al saldo o al rifinanziamento.</p>
+                        <p style="color: #6b7280; font-size: 14px; text-transform: uppercase; letter-spacing: 1px; font-weight: bold; margin-bottom: 8px;">Valore Futuro Garantito (Maxirata)</p>
+                        <p style="font-size: 28px; font-weight: bold; color: #001E50; margin: 0;">${formatCurrency(data.vfgEuro)}</p>
+                        <p style="color: #4b5563; font-size: 14px; margin-top: 12px; line-height: 1.5;">Al termine del contratto (${data.durataMesiTotali} mesi) potrai SOSTITUIRE la vettura con un'altra e provvederemo noi al saldo. Altrimenti potrai scegliere di restituire la vettura o tenerla procedendo al saldo o al rifinanziamento.</p>
                     </div>
                 `;
             }
@@ -675,6 +742,9 @@
                             .hero-rata { font-size: 64px; font-weight: bold; color: white; margin: 10px 0; }
                             .hero-mesi { color: #00B0F0; font-weight: bold; font-size: 20px; }
                             .footer { font-size: 10px; color: #9ca3af; margin-top: 60px; border-top: 1px solid #e5e7eb; padding-top: 20px; text-align: justify;}
+                            table { width: 100%; border-collapse: collapse; margin-bottom: 20px;}
+                            td { padding: 8px 0; border-bottom: 1px solid #e5e7eb; font-size: 14px; color: #4b5563;}
+                            td.right { text-align: right; font-weight: bold; color: #111827;}
                         </style>
                     </head>
                     <body>
@@ -694,25 +764,21 @@
 
                         <div class="hero-box">
                             <p style="text-transform: uppercase; letter-spacing: 2px; font-size: 14px; margin: 0; color: #9ca3af;">Il tuo costo di guida mensile</p>
-                            <p class="hero-rata">${printRata}</p>
-                            <p class="hero-mesi">x ${printNumRate} MESI</p>
+                            <p class="hero-rata">${formatCurrency(data.rataMensile)}</p>
+                            <p class="hero-mesi">x ${data.numeroRateNormali} MESI</p>
                         </div>
 
-                        <div style="display: flex; justify-content: space-between; padding: 20px; border: 1px solid #e5e7eb; border-radius: 8px; margin-bottom: 20px;">
-                            <div>
-                                <p style="margin: 0; color: #6b7280; font-size: 14px;">Prezzo Vettura</p>
-                                <p style="margin: 4px 0 0 0; font-weight: bold; font-size: 18px;">${formatCurrency(data.prezzoVeicolo)}</p>
-                            </div>
-                            <div style="text-align: right;">
-                                <p style="margin: 0; color: #6b7280; font-size: 14px;">Anticipo Versato</p>
-                                <p style="margin: 4px 0 0 0; font-weight: bold; font-size: 18px;">${printAnticipo}</p>
-                            </div>
-                        </div>
+                        <table>
+                            <tr><td>Prezzo Vettura</td><td class="right">${formatCurrency(data.prezzoVeicolo)}</td></tr>
+                            <tr><td>Anticipo Versato</td><td class="right">${formatCurrency(data.anticipoEuro)}</td></tr>
+                            <tr><td>Importo Totale Finanziato</td><td class="right" style="color: #00B0F0;">${formatCurrency(data.importoTotaleFinanziato)}</td></tr>
+                            <tr><td>TAN Fissa</td><td class="right">${data.tassoAnnuale.toFixed(2)}%</td></tr>
+                        </table>
 
                         ${vfgSection}
 
                         <div class="footer">
-                            <p>Documento generato a scopo simulativo. Per tutti i costi relativi al finanziamento (inclusi TAN e TAEG definitivi), si rimanda al Modulo "INFORMAZIONI EUROPEE DI BASE SUL CREDITO AI CONSUMATORI" (SECCI) disponibile in Concessionaria. Salvo approvazione Volkswagen Financial Services.</p>
+                            <p>Documento generato a scopo simulativo da tool interno. Oltre alla rata mensile indicata, verranno addebitate le spese di incasso SEPA pari a € ${data.speseIncasso.toFixed(2)}/mese. Sulla prima rata graverà l'imposta di bollo pari a € ${data.impostaBollo.toFixed(2)}. Per tutti i costi relativi al finanziamento (inclusi TAN e TAEG definitivi), si rimanda al Modulo "INFORMAZIONI EUROPEE DI BASE SUL CREDITO AI CONSUMATORI" (SECCI) generato ufficialmente dal sistema della Banca. Salvo approvazione Volkswagen Financial Services.</p>
                         </div>
                         <script>
                             setTimeout(() => { window.print(); window.close(); }, 500);
@@ -729,11 +795,8 @@
              printWindow.document.close();
         });
 
-        // Setup iniziale della UI (la colonna destra parte nascosta per avere la form al centro)
         controlsColumn.classList.replace('md:w-7/12', 'md:w-full');
         switchMode('pvv');
     </script>
-</body>
-</html>
 </body>
 </html>
