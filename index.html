@@ -251,6 +251,11 @@
         <div id="risultati-container" class="md:w-5/12 p-8 md:p-10 bg-vw-base text-white hidden flex-col justify-between" style="max-height: 90vh; overflow-y: auto;">
             <div id="risultati-stampa" class="w-full">
 
+                <!-- Provvigione: solo a video, non inclusa nella stampa -->
+                <div class="flex justify-end -mt-4 mb-4">
+                    <span id="res-provvigione" class="text-[11px] text-gray-400 bg-white/5 border border-gray-700 rounded px-2 py-1" title="Provvigione concessionario (non stampata)"></span>
+                </div>
+
                 <p id="res-avviso" class="hidden mb-4 p-3 rounded bg-red-500/20 border border-red-400 text-red-200 text-xs font-semibold"></p>
 
                 <div class="mb-8 text-center border-b border-gray-600 pb-6">
@@ -330,6 +335,12 @@
                 ]
             },
             classico: { tan: 10.99, codice: 'FU1 BD 100' },
+            // Provvigione concessionario: % su (prezzo di vendita - anticipo) + quota fissa. Solo a video, mai in stampa.
+            provvigioni: {
+                pvv: { percent: 1.4, fisso: 70 },
+                multimake: { percent: 1.8, fisso: 0 },
+                classico: { percent: 2.0, fisso: 0 }
+            },
             servizi: {
                 furtoPerMilleAnnuo: { first_trip: 11, business_tour: 18 },
                 gapMensile: 19,
@@ -725,15 +736,19 @@
             const monthlyIRR = calculateIRR(cashFlows);
             const taeg = isFinite(monthlyIRR) ? (Math.pow(1 + monthlyIRR, 12) - 1) : null;
 
+            const P = CONFIG.provvigioni[tipoFinanziamento];
+            const provvigione = round2((prezzoVeicolo - anticipoEuro) * P.percent / 100 + P.fisso);
+
             return {
                 tipoFinanziamento, nomeCliente, modelloVeicolo, prezzoVeicolo, anticipoEuro,
                 rataMensile: rataMensileTotale, primaRata, numeroRateNormali, vfgEuro, vfgPercent, durataMesiTotali,
                 kmAnnui, tassoAnnuale, costoServiziFinanziati, costoServiziRipartiti, speseIstruttoria,
-                importoTotaleFinanziato, taeg, impostaBollo, speseIncasso
+                importoTotaleFinanziato, taeg, impostaBollo, speseIncasso, provvigione
             };
         };
 
         const render = (d) => {
+            document.getElementById('res-provvigione').textContent = `Provv. ${formatCurrency(d.provvigione)}`;
             document.getElementById('res-nome-cliente').textContent = d.nomeCliente;
             document.getElementById('res-prezzo').textContent = formatCurrency(d.prezzoVeicolo);
             document.getElementById('res-anticipo').textContent = formatCurrency(d.anticipoEuro);
